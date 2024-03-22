@@ -13,9 +13,9 @@ class _LoginPageState extends State<LoginPage> {
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
         body: Center(
-      child: Column(children: [
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
-          height: height * .40,
+          height: height * .45,
           decoration: const BoxDecoration(
               image: DecorationImage(
                   fit: BoxFit.fitHeight,
@@ -24,11 +24,23 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               Container(
                 height: height * .25,
-                margin: const EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 0.0),
+                margin: const EdgeInsets.fromLTRB(0.0, 40.0, 0.0, 0.0),
                 decoration: const BoxDecoration(
                     image: DecorationImage(
                         fit: BoxFit.fitHeight,
                         image: AssetImage("assets/images/topkapilogo.png"))),
+              ),
+            ],
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Merhaba,\nHoşgeldin!",
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               )
             ],
           ),
