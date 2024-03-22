@@ -15,10 +15,23 @@ class _LoginPageState extends State<LoginPage> {
         body: Center(
       child: Column(children: [
         Container(
-          height: height,
+          height: height * .40,
           decoration: const BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("assets/images/topkapilogo.png"))),
+                  fit: BoxFit.fitHeight,
+                  image: AssetImage("assets/images/arkaplan.png"))),
+          child: Column(
+            children: [
+              Container(
+                height: height * .25,
+                margin: const EdgeInsets.fromLTRB(0.0, 25.0, 0.0, 0.0),
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.fitHeight,
+                        image: AssetImage("assets/images/topkapilogo.png"))),
+              )
+            ],
+          ),
         )
       ]),
     ));
