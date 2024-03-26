@@ -3,12 +3,12 @@ import 'pages/login.dart';
 
 void main() {
   runApp(
-    MaterialApp(home: MyApp()),
+    const MaterialApp(home: MyApp()),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(color: Colors.white),
                 ),
-                child: Center(
+                child: const Center(
                   child: Text(
                     'ÖĞRENCİ',
                     style: TextStyle(
