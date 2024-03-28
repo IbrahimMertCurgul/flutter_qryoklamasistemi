@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'pages/login.dart';
+import 'pages/studentlogin.dart';
+import 'pages/teacherlogin.dart';
 
 void main() {
   runApp(
@@ -46,8 +47,10 @@ class MyApp extends StatelessWidget {
             const SizedBox(height: 30),
             GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const StudentLoginPage()));
               },
               child: Container(
                 height: 53,
@@ -71,8 +74,10 @@ class MyApp extends StatelessWidget {
             const SizedBox(height: 25),
             GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const TeacherLoginPage()));
               },
               child: Container(
                 height: 53,
