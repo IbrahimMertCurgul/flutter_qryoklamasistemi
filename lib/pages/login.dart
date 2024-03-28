@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
@@ -14,11 +15,14 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
+    // ignore: no_leading_underscores_for_local_identifiers
     var size, height, width, _signInWithEmailAndPassword;
     size = MediaQuery.of(context).size; //Ekran boyutları alma
     height = size.height;
     width = size.width;
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: false, //Ekran dışına taşma hatasını silme
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,10 +39,13 @@ class _LoginPageState extends State<LoginPage> {
                             image: AssetImage("assets/images/arkaplan.png"))),
                     child: Column(
                       children: [
+                        AppBar(
+                          backgroundColor: Colors.transparent,
+                          elevation: 0,
+                          leading: const BackButton(color: Colors.white),
+                        ),
                         Container(
                           height: height * .25,
-                          margin:
-                              const EdgeInsets.fromLTRB(0.0, 40.0, 0.0, 0.0),
                           decoration: const BoxDecoration(
                               image: DecorationImage(
                                   fit: BoxFit.fitHeight,
