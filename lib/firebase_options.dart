@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
+import 'api-keys.dart';
+
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
 /// Example:
@@ -44,7 +46,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA8eukBITYTM918rRiu2NZ9l4ptbx8TBMU',
+    apiKey: ApiKeys.apiKeyWeb,
     appId: '1:592670576430:web:cf0e2a9fb745567b23b4bf',
     messagingSenderId: '592670576430',
     projectId: 'flutter-qryoklamasistemi',
@@ -54,7 +56,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAAn948ktCkVxIXTzdqA2kicXP2GesTpl8',
+    apiKey: ApiKeys.apiKeyAndroid,
     appId: '1:592670576430:android:7879248019b4d60b23b4bf',
     messagingSenderId: '592670576430',
     projectId: 'flutter-qryoklamasistemi',
@@ -62,7 +64,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyC1syY-XujYYyMp6ukbhl2TqsWPENfwtWk',
+    apiKey: ApiKeys.apiKeyIOS,
     appId: '1:592670576430:ios:f3ec8f9c01e016ee23b4bf',
     messagingSenderId: '592670576430',
     projectId: 'flutter-qryoklamasistemi',
@@ -71,7 +73,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyC1syY-XujYYyMp6ukbhl2TqsWPENfwtWk',
+    apiKey: ApiKeys.apiKeyMacOS,
     appId: '1:592670576430:ios:236a23818f3ab08b23b4bf',
     messagingSenderId: '592670576430',
     projectId: 'flutter-qryoklamasistemi',
