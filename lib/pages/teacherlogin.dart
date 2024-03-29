@@ -67,13 +67,13 @@ class _LoginPageState extends State<TeacherLoginPage> {
                                   fontSize: 24.0, color: Colors.black),
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: 'Merhaba!',
+                                  text: 'Öğretmen',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 32.0),
                                 ),
                                 TextSpan(
-                                  text: '\nHoşgeldiniz',
+                                  text: '\nGirişi',
                                 ),
                               ],
                             ),
@@ -156,7 +156,7 @@ class _LoginPageState extends State<TeacherLoginPage> {
                             const Padding(
                               padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
                               child: Text(
-                                "Merhaba, Hoşgeldiniz!",
+                                "Öğretmen Girişi",
                                 style: TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold,
