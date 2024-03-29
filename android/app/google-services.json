@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "592670576430",
+    "project_id": "flutter-qryoklamasistemi",
+    "storage_bucket": "flutter-qryoklamasistemi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592670576430:android:7879248019b4d60b23b4bf",
+        "android_client_info": {
+          "package_name": "com.example.flutter_qryoklamasistemi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAn948ktCkVxIXTzdqA2kicXP2GesTpl8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
