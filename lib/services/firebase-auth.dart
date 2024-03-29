@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import "package:cloud_firestore/cloud_firestore.dart";
 
 class AuthService {
@@ -7,14 +9,14 @@ class AuthService {
       {required String name,
       required int surname,
       required int email,
-      required int StudentID,
-      required String Password}) async {
+      required int studentID,
+      required String password}) async {
     await userCollection.doc().set({
       "name": name,
       "surname": surname,
       "email": email,
-      "StudentID": StudentID,
-      "Password": Password,
+      "StudentID": studentID,
+      "Password": password,
     });
   }
 }

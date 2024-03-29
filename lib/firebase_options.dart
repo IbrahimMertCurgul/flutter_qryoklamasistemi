@@ -46,7 +46,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: ApiKeys.apiKeyWeb, //web api key
+    apiKey: apiKeys.apiKeyWeb, //web api key
     appId: '1:592670576430:web:cf0e2a9fb745567b23b4bf',
     messagingSenderId: '592670576430',
     projectId: 'flutter-qryoklamasistemi',
@@ -56,7 +56,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: ApiKeys.apiKeyAndroid,
+    apiKey: apiKeys.apiKeyAndroid,
     appId: '1:592670576430:android:7879248019b4d60b23b4bf',
     messagingSenderId: '592670576430',
     projectId: 'flutter-qryoklamasistemi',
@@ -64,7 +64,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: ApiKeys.apiKeyIOS,
+    apiKey: apiKeys.apiKeyIOS,
     appId: '1:592670576430:ios:f3ec8f9c01e016ee23b4bf',
     messagingSenderId: '592670576430',
     projectId: 'flutter-qryoklamasistemi',
@@ -73,7 +73,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: ApiKeys.apiKeyMacOS,
+    apiKey: apiKeys.apiKeyMacOS,
     appId: '1:592670576430:ios:236a23818f3ab08b23b4bf',
     messagingSenderId: '592670576430',
     projectId: 'flutter-qryoklamasistemi',
