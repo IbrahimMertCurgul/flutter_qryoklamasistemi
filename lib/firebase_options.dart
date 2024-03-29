@@ -46,7 +46,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: ApiKeys.apiKeyWeb,
+    apiKey: ApiKeys.apiKeyWeb, //web api key
     appId: '1:592670576430:web:cf0e2a9fb745567b23b4bf',
     messagingSenderId: '592670576430',
     projectId: 'flutter-qryoklamasistemi',
