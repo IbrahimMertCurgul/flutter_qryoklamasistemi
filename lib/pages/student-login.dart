@@ -1,16 +1,16 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables, file_names
 import 'package:flutter/material.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 
-class TeacherLoginPage extends StatefulWidget {
-  const TeacherLoginPage({super.key});
+class StudentLoginPage extends StatefulWidget {
+  const StudentLoginPage({super.key});
 
   @override
-  State<TeacherLoginPage> createState() =>
+  State<StudentLoginPage> createState() =>
       _LoginPageState(); //login sayfasını _LoginPageState() a dönüştür
 }
 
-class _LoginPageState extends State<TeacherLoginPage> {
+class _LoginPageState extends State<StudentLoginPage> {
   @override
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
@@ -66,7 +66,7 @@ class _LoginPageState extends State<TeacherLoginPage> {
                                   fontSize: 24.0, color: Colors.black),
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: 'Öğretmen',
+                                  text: 'Öğrenci',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 32.0),
@@ -77,7 +77,7 @@ class _LoginPageState extends State<TeacherLoginPage> {
                               ],
                             ),
                           ),
-                          ////////////////////////////ÖĞRETMEN INPUT/////////////////////////////////
+                          ////////////////////////////ÖĞRENCİ INPUT/////////////////////////////////
                           Padding(
                             padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
                             child: TextField(
@@ -86,7 +86,7 @@ class _LoginPageState extends State<TeacherLoginPage> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
                                 ),
-                                labelText: 'Kullanıcı Adı',
+                                labelText: 'Öğrenci Numarası',
                               ),
                             ),
                           ),
@@ -155,14 +155,14 @@ class _LoginPageState extends State<TeacherLoginPage> {
                             const Padding(
                               padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
                               child: Text(
-                                "Öğretmen Girişi",
+                                "Öğrenci Girişi",
                                 style: TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                               ),
                             ),
-                            ////////////////////////////ÖĞRETMEN INPUT/////////////////////////////////
+                            ////////////////////////////ÖĞRENCİ INPUT/////////////////////////////////
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 80, 0, 0),
                               child: SizedBox(
@@ -176,7 +176,7 @@ class _LoginPageState extends State<TeacherLoginPage> {
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(30.0),
                                     ),
-                                    labelText: 'Kullanıcı Adı',
+                                    labelText: 'Öğrenci Numarası',
                                   ),
                                 ),
                               ),
