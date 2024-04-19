@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_qryoklamasistemi/pages/teacher-login.dart';
 import 'pages/student-login.dart';
-<<<<<<< HEAD
-=======
-import 'pages/teacher-login.dart';
 import 'pages/teacher-page.dart';
->>>>>>> parent of effa27f (TeacherPage1.1)
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -90,11 +85,7 @@ class QRyoklamasistemi extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-<<<<<<< HEAD
-                            const MyHomePage())); //const TeacherLoginPage()
-=======
-                            TeacherLoginPage())); //const TeacherLoginPage()
->>>>>>> bbe7607460b2acf46ee889d1a5c4968cc001120a
+                            MyHomePage())); //const TeacherLoginPage()
               },
               child: Container(
                 height: 53,
@@ -106,7 +97,7 @@ class QRyoklamasistemi extends StatelessWidget {
                 ),
                 child: const Center(
                   child: Text(
-                    'AKADEMİSYEN',
+                    'ÖĞRETMEN',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
