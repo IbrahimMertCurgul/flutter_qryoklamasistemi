@@ -1,8 +1,6 @@
 // ignore_for_file: file_names
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:flutter_qryoklamasistemi/main.dart';
-=======
 
 void main() {
   runApp(const TeacherHome());
@@ -19,7 +17,6 @@ class TeacherHome extends StatelessWidget {
     );
   }
 }
->>>>>>> bbe7607460b2acf46ee889d1a5c4968cc001120a
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
@@ -91,7 +88,7 @@ class MyHomePage extends StatelessWidget {
                 ),
               ),
               /**************/
-              const Row(
+              Row(
                 children: [
                   Padding(
                     padding: EdgeInsets.all(24.0),
@@ -105,7 +102,7 @@ class MyHomePage extends StatelessWidget {
                   )
                 ],
               ),
-              const Row(
+              Row(
                 children: [
                   Padding(
                     padding: EdgeInsets.fromLTRB(24, 0, 0, 0),
@@ -128,13 +125,12 @@ class MyHomePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       /**************************DERSLERİM***************************/
-<<<<<<< HEAD
                       child: ListView.builder(
                         itemCount: 10,
                         itemBuilder: (BuildContext context, int index) {
                           if (index == 0) {
                             // return the header
-                            return const Column(
+                            return new Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
@@ -146,52 +142,17 @@ class MyHomePage extends StatelessWidget {
                             );
                           }
                           // index değerine bağlı olarak arkaplan rengini değiştir
-                          Color? backgroundColor =
-                              index % 2 == 0 ? Colors.white : Colors.grey[300];
                           return Container(
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                                 border: BorderDirectional(top: BorderSide())),
                             child: ListTile(
                               title: Text(
-                                'Ders $index',
-                                style: const TextStyle(color: Colors.black),
+                                'Ders ${index}',
+                                style: TextStyle(color: Colors.black),
                               ),
-=======
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(padding: const EdgeInsets.only(top: 20.0)),
-                          Text(
-                            "Derslerim",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          SizedBox(height: 0),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: 10,
-                              itemBuilder: (BuildContext context, int index) {
-                                if (index == 0) {
-                                  // return the header
-                                  return SizedBox.shrink();
-                                }
-                                // index değerine bağlı olarak arkaplan rengini değiştir
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    border:
-                                        BorderDirectional(top: BorderSide()),
-                                  ),
-                                  child: ListTile(
-                                    title: Text(
-                                      'Ders ${index}',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                );
-                              },
->>>>>>> bbe7607460b2acf46ee889d1a5c4968cc001120a
                             ),
-                          ),
-                        ],
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -214,34 +175,17 @@ class MyHomePage extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-<<<<<<< HEAD
                                       const QRyoklamasistemi())); // QR Okuma ekranı ***********************
                         },
-                        child: const Center(
+                        child: Center(
                           child: Text(
                             'Yoklama Başlat',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w600,
                               color: Colors.black,
-=======
-                                      const TeacherHome())); // QR Okuma ekranı ***********************
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Yoklama Başlat',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black,
-                              ),
->>>>>>> bbe7607460b2acf46ee889d1a5c4968cc001120a
                             ),
-                            SizedBox(width: 10),
-                            Icon(Icons.qr_code, size: 30, color: Colors.black),
-                          ],
+                          ),
                         ),
                       ),
                     ),
