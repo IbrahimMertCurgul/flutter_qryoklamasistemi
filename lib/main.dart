@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_qryoklamasistemi/pages/teacher-login.dart';
 import 'pages/student-login.dart';
-import 'pages/teacher-page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -85,7 +85,7 @@ class MyApp extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            MyHomePage())); //const TeacherLoginPage()
+                            TeacherLoginPage())); //const TeacherLoginPage()
               },
               child: Container(
                 height: 53,

@@ -1,34 +1,30 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, file_names
 import 'package:flutter/material.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
+import 'teacher-page.dart'; // TeacherHomePage sayfasının import edildiği yer
 
 class TeacherLoginPage extends StatefulWidget {
-  const TeacherLoginPage({super.key});
+  const TeacherLoginPage({Key? key}) : super(key: key);
 
   @override
-  State<TeacherLoginPage> createState() =>
-      _LoginPageState(); //login sayfasını _LoginPageState() a dönüştür
+  State<TeacherLoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<TeacherLoginPage> {
   @override
   Widget build(BuildContext context) {
-    // ignore: no_leading_underscores_for_local_identifiers
-    var size, height, width, _signInWithEmailAndPassword;
-    size = MediaQuery.of(context).size; //Ekran boyutları alma
+    var size, height, width;
+    size = MediaQuery.of(context).size;
     height = size.height;
     width = size.width;
     return Scaffold(
-      extendBodyBehindAppBar:
-          true, //Appbar transparanlaştırma işleminde kullanıldı
-      resizeToAvoidBottomInset: true, //SingleChildScrollView ile ilgili
+      extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (width < 700 &&
-                  width / height < 0.8) //MOBİLDE İF İÇİNDEKİ KODLAR GEÇERLİ
+              if (width < 700 && width / height < 0.8)
                 Column(
                   children: [
                     Container(
@@ -77,7 +73,6 @@ class _LoginPageState extends State<TeacherLoginPage> {
                               ],
                             ),
                           ),
-                          ////////////////////////////ÖĞRETMEN INPUT/////////////////////////////////
                           Padding(
                             padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
                             child: TextField(
@@ -90,7 +85,6 @@ class _LoginPageState extends State<TeacherLoginPage> {
                               ),
                             ),
                           ),
-                          ////////////////////////////ŞİFRE INPUT/////////////////////////////////
                           Padding(
                             padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                             child: TextField(
@@ -129,7 +123,7 @@ class _LoginPageState extends State<TeacherLoginPage> {
                     ),
                   ],
                 )
-              else //BİLGİSAYARDA ELSE İÇİNDEKİ KODLAR GEÇERLİ -------------------------
+              else
                 Container(
                   height: height,
                   decoration: const BoxDecoration(
@@ -162,7 +156,6 @@ class _LoginPageState extends State<TeacherLoginPage> {
                                     color: Colors.white),
                               ),
                             ),
-                            ////////////////////////////ÖĞRETMEN INPUT/////////////////////////////////
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 80, 0, 0),
                               child: SizedBox(
@@ -181,7 +174,6 @@ class _LoginPageState extends State<TeacherLoginPage> {
                                 ),
                               ),
                             ),
-                            ////////////////////////////ŞİFRE INPUT/////////////////////////////////
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
                               child: SizedBox(
@@ -232,6 +224,15 @@ class _LoginPageState extends State<TeacherLoginPage> {
           ),
         ),
       ),
+    );
+  }
+
+  void _signInWithEmailAndPassword() {
+    // Burada oturum açma işlemlerini gerçekleştirebilirsiniz.
+    // Oturum açma işlemi başarılı olduktan sonra TeacherHomePage sayfasına geçiş yapalım:
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TeacherHome()),
     );
   }
 }

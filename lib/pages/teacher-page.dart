@@ -5,11 +5,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const TeacherHome());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class TeacherHome extends StatelessWidget {
+  const TeacherHome({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class MyHomePage extends StatelessWidget {
           children: <Widget>[
             const DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Color.fromARGB(255, 138, 35, 50),
               ),
               child: Text(
                 'Drawer Başlık',
@@ -123,37 +123,44 @@ class MyHomePage extends StatelessWidget {
                       width: MediaQuery.of(context).size.width / 1.5,
                       height: MediaQuery.of(context).size.height / 3,
                       decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20)),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                       /**************************DERSLERİM***************************/
-                      child: ListView.builder(
-                        itemCount: 10,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (index == 0) {
-                            // return the header
-                            return new Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Derslerim",
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                SizedBox(height: 15),
-                              ],
-                            );
-                          }
-                          // index değerine bağlı olarak arkaplan rengini değiştir
-                          return Container(
-                            decoration: BoxDecoration(
-                                border: BorderDirectional(top: BorderSide())),
-                            child: ListTile(
-                              title: Text(
-                                'Ders ${index}',
-                                style: TextStyle(color: Colors.black),
-                              ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(padding: const EdgeInsets.only(top: 20.0)),
+                          Text(
+                            "Derslerim",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          SizedBox(height: 0),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: 10,
+                              itemBuilder: (BuildContext context, int index) {
+                                if (index == 0) {
+                                  // return the header
+                                  return SizedBox.shrink();
+                                }
+                                // index değerine bağlı olarak arkaplan rengini değiştir
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        BorderDirectional(top: BorderSide()),
+                                  ),
+                                  child: ListTile(
+                                    title: Text(
+                                      'Ders ${index}',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -176,17 +183,22 @@ class MyHomePage extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      const MyApp())); // QR Okuma ekranı ***********************
+                                      const TeacherHome())); // QR Okuma ekranı ***********************
                         },
-                        child: Center(
-                          child: Text(
-                            'Yoklama Başlat',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Yoklama Başlat',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
                             ),
-                          ),
+                            SizedBox(width: 10),
+                            Icon(Icons.qr_code, size: 30, color: Colors.black),
+                          ],
                         ),
                       ),
                     ),
