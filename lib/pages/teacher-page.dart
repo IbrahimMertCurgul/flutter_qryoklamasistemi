@@ -1,24 +1,6 @@
 // ignore_for_file: file_names
-
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Öğretmen Ana-Sayfa',
-      home: MyHomePage(),
-    );
-  }
-}
+import 'package:flutter_qryoklamasistemi/main.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
@@ -90,24 +72,24 @@ class MyHomePage extends StatelessWidget {
                 ),
               ),
               /**************/
-              Row(
+              const Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: EdgeInsets.all(24.0),
                     child: Text(
                         style: TextStyle(color: Colors.white, fontSize: 30),
                         "Hoş Geldiniz\nSn. İsim Soyisim"),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: Icon(Icons.person, size: 65, color: Colors.white),
                   )
                 ],
               ),
-              Row(
+              const Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
+                    padding: EdgeInsets.fromLTRB(24, 0, 0, 0),
                     child: Text(
                         style: TextStyle(color: Colors.white, fontSize: 26),
                         "13 Nisan 2024\n13:45"),
@@ -131,7 +113,7 @@ class MyHomePage extends StatelessWidget {
                         itemBuilder: (BuildContext context, int index) {
                           if (index == 0) {
                             // return the header
-                            return new Column(
+                            return const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
@@ -144,12 +126,12 @@ class MyHomePage extends StatelessWidget {
                           }
                           // index değerine bağlı olarak arkaplan rengini değiştir
                           return Container(
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                                 border: BorderDirectional(top: BorderSide())),
                             child: ListTile(
                               title: Text(
-                                'Ders ${index}',
-                                style: TextStyle(color: Colors.black),
+                                'Ders $index',
+                                style: const TextStyle(color: Colors.black),
                               ),
                             ),
                           );
@@ -176,9 +158,9 @@ class MyHomePage extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      const MyApp())); // QR Okuma ekranı ***********************
+                                      const QRyoklamasistemi())); // QR Okuma ekranı ***********************
                         },
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             'Yoklama Başlat',
                             style: TextStyle(

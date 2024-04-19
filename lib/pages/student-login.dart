@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, file_names
 import 'package:flutter/material.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_qryoklamasistemi/auth.dart';
 
 class StudentLoginPage extends StatefulWidget {
   const StudentLoginPage({super.key});
@@ -11,6 +12,59 @@ class StudentLoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<StudentLoginPage> {
+  final User? user = Auth().currentUser;
+
+  Future<void> signOut() async {
+    await Auth().signOut();
+  }
+
+  String? errormsg = '';
+  bool isLogin = true;
+
+  final TextEditingController _controllerEmail = TextEditingController();
+  final TextEditingController _controllerPass = TextEditingController();
+
+  Future<void> signInWithEmailandPassword() async {
+    try {
+      await Auth().signInWithEmailandPassword(
+          email: _controllerEmail.text, password: _controllerPass.text);
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errormsg = e.message;
+      });
+    }
+  }
+
+  Widget _entryField(
+    String title,
+    TextEditingController controller,
+  ) {
+    return TextField(
+      controller: controller,
+      obscureText: false,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        labelText: 'Öğrenci Numarası',
+      ),
+    );
+  }
+
+  Widget _errormessage() {
+    return Text(errormsg == '' ? '' : 'Hata!:  $errormsg');
+  }
+
+  Widget _submitButton() {
+    return ElevatedButton(
+      onPressed: signInWithEmailandPassword,
+      child: const Text(
+        'Giriş Yap',
+        style: TextStyle(fontSize: 20, color: Colors.black),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
@@ -79,54 +133,19 @@ class _LoginPageState extends State<StudentLoginPage> {
                           ),
                           ////////////////////////////ÖĞRENCİ INPUT/////////////////////////////////
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
-                            child: TextField(
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                                labelText: 'Öğrenci Numarası',
-                              ),
-                            ),
-                          ),
+                              padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
+                              child: _entryField("email", _controllerEmail)),
                           ////////////////////////////ŞİFRE INPUT/////////////////////////////////
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                            child: TextField(
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                                labelText: 'Şifre',
-                              ),
-                            ),
-                          ),
+                              padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                              child: _entryField("password", _controllerPass)),
                         ],
                       ),
                     ),
+                    _errormessage(),
                     Padding(
-                      padding: const EdgeInsets.all(40.0),
-                      child: SizedBox(
-                        height: 40.0,
-                        width: 150.0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color: const Color.fromARGB(255, 255, 255, 255),
-                          ),
-                          child: ElevatedButton(
-                            onPressed: _signInWithEmailAndPassword,
-                            child: const Text(
-                              'Giriş Yap',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.black),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                        padding: const EdgeInsets.all(40.0),
+                        child: _submitButton()),
                   ],
                 )
               else //BİLGİSAYARDA ELSE İÇİNDEKİ KODLAR GEÇERLİ -------------------------

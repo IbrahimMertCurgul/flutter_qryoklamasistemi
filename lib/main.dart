@@ -11,12 +11,12 @@ void main() async {
   );
 
   runApp(
-    const MaterialApp(home: MyApp()),
+    const MaterialApp(home: QRyoklamasistemi()),
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class QRyoklamasistemi extends StatelessWidget {
+  const QRyoklamasistemi({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +85,7 @@ class MyApp extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            MyHomePage())); //const TeacherLoginPage()
+                            const MyHomePage())); //const TeacherLoginPage()
               },
               child: Container(
                 height: 53,
@@ -97,7 +97,7 @@ class MyApp extends StatelessWidget {
                 ),
                 child: const Center(
                   child: Text(
-                    'ÖĞRETMEN',
+                    'AKADEMİSYEN',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
