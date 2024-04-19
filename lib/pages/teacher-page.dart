@@ -146,6 +146,8 @@ class MyHomePage extends StatelessWidget {
                             );
                           }
                           // index değerine bağlı olarak arkaplan rengini değiştir
+                          Color? backgroundColor =
+                              index % 2 == 0 ? Colors.white : Colors.grey[300];
                           return Container(
                             decoration: const BoxDecoration(
                                 border: BorderDirectional(top: BorderSide())),

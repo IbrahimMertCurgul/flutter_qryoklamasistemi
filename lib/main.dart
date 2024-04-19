@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_qryoklamasistemi/pages/teacher-login.dart';
 import 'pages/student-login.dart';
+<<<<<<< HEAD
+=======
+import 'pages/teacher-login.dart';
+import 'pages/teacher-page.dart';
+>>>>>>> parent of effa27f (TeacherPage1.1)
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
