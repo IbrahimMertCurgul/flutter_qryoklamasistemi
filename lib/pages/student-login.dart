@@ -1,7 +1,6 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, file_names
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_qryoklamasistemi/auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_qryoklamasistemi/pages/teacher-page.dart';
 
 class StudentLoginPage extends StatefulWidget {
   const StudentLoginPage({super.key});
@@ -12,28 +11,11 @@ class StudentLoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<StudentLoginPage> {
-  final User? user = Auth().currentUser;
-
-  Future<void> signOut() async {
-    await Auth().signOut();
-  }
-
-  String? errormsg = '';
-  bool isLogin = true;
-
-  final TextEditingController _controllerEmail = TextEditingController();
+  final TextEditingController _controllerNumber = TextEditingController();
   final TextEditingController _controllerPass = TextEditingController();
 
-  Future<void> signInWithEmailandPassword() async {
-    try {
-      await Auth().signInWithEmailandPassword(
-          email: _controllerEmail.text, password: _controllerPass.text);
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        errormsg = e.message;
-      });
-    }
-  }
+  final CollectionReference _studentsCollection =
+      FirebaseFirestore.instance.collection('students');
 
   Widget _entryField(
     String title,
@@ -51,24 +33,52 @@ class _LoginPageState extends State<StudentLoginPage> {
     );
   }
 
-  Widget _errormessage() {
-    return Text(errormsg == '' ? '' : 'Hata!:  $errormsg');
-  }
+  Future<void> _signIn() async {
+    final String studentNumber = _controllerNumber.text;
+    final String password = _controllerPass.text;
 
-  Widget _submitButton() {
-    return ElevatedButton(
-      onPressed: signInWithEmailandPassword,
-      child: const Text(
-        'Giriş Yap',
-        style: TextStyle(fontSize: 20, color: Colors.black),
-      ),
-    );
+    try {
+      QuerySnapshot<Map<String, dynamic>> studentSnapshots =
+          await _studentsCollection
+              .where('studentNumber', isEqualTo: studentNumber)
+              .get() as QuerySnapshot<Map<String, dynamic>>;
+
+      if (studentSnapshots.docs.isNotEmpty) {
+        // Öğrenci numarası ile eşleşen bir döküman bulundu
+        final DocumentSnapshot<Map<String, dynamic>> studentSnapshot =
+            studentSnapshots.docs.first;
+
+        final Map<String, dynamic>? data = studentSnapshot.data();
+
+        // Veri null değilse kontrol et
+        if (data != null) {
+          // Şifreyi kontrol et
+          if (data['password'] == password) {
+            // Giriş başarılı olduğunda MyHomePage sayfasına yönlendir
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TeacherHome(),
+              ),
+            );
+          } else {
+            print('Hatalı şifre');
+          }
+        } else {
+          print('Hata: Veri bulunamadı');
+        }
+      } else {
+        print('Öğrenci bulunamadı');
+      }
+    } catch (e) {
+      print('Hata: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
-    var size, height, width, _signInWithEmailAndPassword;
+    var size, height, width;
     size = MediaQuery.of(context).size; //Ekran boyutları alma
     height = size.height;
     width = size.width;
@@ -134,7 +144,7 @@ class _LoginPageState extends State<StudentLoginPage> {
                           ////////////////////////////ÖĞRENCİ INPUT/////////////////////////////////
                           Padding(
                               padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
-                              child: _entryField("email", _controllerEmail)),
+                              child: _entryField("email", _controllerNumber)),
                           ////////////////////////////ŞİFRE INPUT/////////////////////////////////
                           Padding(
                               padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
@@ -142,10 +152,18 @@ class _LoginPageState extends State<StudentLoginPage> {
                         ],
                       ),
                     ),
-                    _errormessage(),
                     Padding(
-                        padding: const EdgeInsets.all(40.0),
-                        child: _submitButton()),
+                      padding: const EdgeInsets.all(40.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _signIn();
+                        },
+                        child: const Text(
+                          'Giriş Yap',
+                          style: TextStyle(fontSize: 20, color: Colors.black),
+                        ),
+                      ),
+                    ),
                   ],
                 )
               else //BİLGİSAYARDA ELSE İÇİNDEKİ KODLAR GEÇERLİ -------------------------
@@ -231,7 +249,7 @@ class _LoginPageState extends State<StudentLoginPage> {
                                         255, 255, 255, 255),
                                   ),
                                   child: ElevatedButton(
-                                    onPressed: _signInWithEmailAndPassword,
+                                    onPressed: _signIn,
                                     child: const Text(
                                       'Giriş Yap',
                                       style: TextStyle(
