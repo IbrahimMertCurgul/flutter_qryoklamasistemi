@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_qryoklamasistemi/pages/teacher-page.dart';
+import 'student-page.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
+void main() {
+  initializeDateFormatting('tr_TR', ''); // Türkçe yerel ayarları başlatıyoruz
+  runApp(const StudentLoginPage());
+}
 
 class StudentLoginPage extends StatefulWidget {
   const StudentLoginPage({super.key});
@@ -58,7 +64,7 @@ class _LoginPageState extends State<StudentLoginPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => TeacherHome(),
+                builder: (context) => StudentHome(),
               ),
             );
           } else {

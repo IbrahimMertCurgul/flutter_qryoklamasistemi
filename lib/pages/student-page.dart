@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart'; // Intl kütüphanesini ekledik
 import 'dart:async'; // Timer sınıfını kullanmak için ekledik
 
 void main() {
   initializeDateFormatting('tr_TR', ''); // Türkçe yerel ayarları başlatıyoruz
-  runApp(const TeacherHome());
+  runApp(const StudentHome());
 }
 
-class TeacherHome extends StatelessWidget {
-  const TeacherHome({Key? key}) : super(key: key);
+class StudentHome extends StatelessWidget {
+  const StudentHome({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'Öğretmen Ana-Sayfa',
+      title: 'Öğrenci Ana-Sayfa',
       home: MyHomePage(),
     );
   }
@@ -65,19 +64,15 @@ class _MyHomePageState extends State<MyHomePage> {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: <Widget>[
-                  DrawerHeader(
+                  const DrawerHeader(
                     decoration: BoxDecoration(
                       color: Color.fromARGB(255, 138, 35, 50),
                     ),
-                    child: Container(
-                      width: 100, // Genişlik
-                      height: 100, // Yükseklik
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("assets/images/topkapilogo.png"),
-                          fit: BoxFit.contain,
-                        ),
+                    child: Text(
+                      'Drawer Başlık',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
                       ),
                     ),
                   ),
@@ -223,7 +218,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Yoklama Başlat',
+                              'Yoklamaya Katıl',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600,

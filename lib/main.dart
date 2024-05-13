@@ -3,8 +3,10 @@ import 'package:flutter_qryoklamasistemi/pages/teacher-login.dart';
 import 'pages/student-login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
+  initializeDateFormatting('tr_TR', ''); // Türkçe yerel ayarları başlatıyoruz
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
