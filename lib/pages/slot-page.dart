@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_qryoklamasistemi/main.dart';
+import 'teacher-page.dart';
 
 void main() {
   runApp(SlotPage());
@@ -14,6 +15,9 @@ class SlotPage extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(),
+      routes: {
+        '/teacher-page': (context) => TeacherHome(), // TeacherHome sayfası
+      },
     );
   }
 }
@@ -42,8 +46,7 @@ class MyHomePage extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () {
-                  // Geri butonuna basıldığında yapılacak işlemler
-                  // Navigator.pop(context);
+                  Navigator.pushNamed(context, '/teacher-page');
                 },
               ),
               SizedBox(

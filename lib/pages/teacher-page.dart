@@ -3,6 +3,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart'; // Intl kütüphanesini ekledik
 import 'dart:async'; // Timer sınıfını kullanmak için ekledik
 import 'package:flutter_qryoklamasistemi/main.dart';
+import 'slot-page.dart';
 
 void main() {
   initializeDateFormatting('tr_TR', ''); // Türkçe yerel ayarları başlatıyoruz
@@ -14,9 +15,14 @@ class TeacherHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Öğretmen Ana-Sayfa',
-      home: MyHomePage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => MyHomePage(), // Ana sayfa buraya gelecek
+        '/slot-page': (context) => SlotPage(), // SlotPage sayfası
+        // Diğer sayfaların rotalarını da ekleyebilirsiniz
+      },
     );
   }
 }
@@ -218,8 +224,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                         BorderDirectional(top: BorderSide()),
                                   ),
                                   child: ListTile(
+                                    onTap: () {
+                                      if (index == 1) {
+                                        Navigator.pushNamed(
+                                            context, '/slot-page');
+                                      }
+                                    },
                                     title: Text(
-                                      'Ders ${index}',
+                                      'Ders $index',
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ),
@@ -246,12 +258,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           borderRadius: BorderRadius.circular(10)),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(
+                          /* Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const QRyoklamasistemi(),
                             ),
-                          ); // QR Okuma ekranına yönlendir
+                          ); */ // QR Okuma ekranına yönlendir
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
