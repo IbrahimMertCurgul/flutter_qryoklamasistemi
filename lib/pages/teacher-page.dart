@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart'; // Intl kütüphanesini ekledik
 import 'dart:async'; // Timer sınıfını kullanmak için ekledik
+import 'package:flutter_qryoklamasistemi/main.dart';
 
 void main() {
   initializeDateFormatting('tr_TR', ''); // Türkçe yerel ayarları başlatıyoruz
@@ -69,26 +69,59 @@ class _MyHomePageState extends State<MyHomePage> {
                     decoration: BoxDecoration(
                       color: Color.fromARGB(255, 138, 35, 50),
                     ),
-                    child: Container(
-                      width: 100, // Genişlik
-                      height: 100, // Yükseklik
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("assets/images/topkapilogo.png"),
-                          fit: BoxFit.contain,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 100, // Genişlik
+                          height: 100, // Yükseklik
+                          padding: EdgeInsets.zero,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image:
+                                  AssetImage("assets/images/topkapilogo.png"),
+                              fit: BoxFit.contain,
+                            ),
+                          ),
                         ),
-                      ),
+                        SizedBox(height: 10),
+                        Text(
+                          'example@topkapi.com',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-            ListTile(
-              title: const Text('Çıkış'),
-              onTap: () {
-                // Çıkış butonuna tıklandığında yapılacak işlemler
-              },
+            Center(
+              child: Container(
+                margin: EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const QRyoklamasistemi(),
+                      ),
+                    );
+                  },
+                  child: ListTile(
+                    title: const Center(child: Text('Çıkış')),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -213,11 +246,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           borderRadius: BorderRadius.circular(10)),
                       child: GestureDetector(
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //  MaterialPageRoute(
-                          //   builder: (context) =>
-                          //     const QRyoklamasistemi())); // QR Okuma ekranı ***********************
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const QRyoklamasistemi(),
+                            ),
+                          ); // QR Okuma ekranına yönlendir
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
