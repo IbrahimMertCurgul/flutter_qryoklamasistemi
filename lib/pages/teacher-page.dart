@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart'; // Intl kütüphanesini ekledik
 import 'dart:async'; // Timer sınıfını kullanmak için ekledik
-import 'package:flutter_qryoklamasistemi/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'slot-page.dart';
+import 'slot-page.dart'; // Bu sayfanın bulunduğundan emin olun
 
 void main() {
   initializeDateFormatting('tr_TR', ''); // Türkçe yerel ayarları başlatıyoruz
@@ -20,7 +19,8 @@ class TeacherHome extends StatelessWidget {
       title: 'Öğretmen Ana-Sayfa',
       initialRoute: '/',
       routes: {
-        '/': (context) => const MyHomePage(), // Ana sayfa buraya gelecek
+        '/': (context) => const TeacherPage(
+            lecturerId: '2ejyrhmrJVdLfDCyjF8n'), // Ana sayfa buraya gelecek
         '/slot-page': (context) => const SlotPage(), // SlotPage sayfası
         // Diğer sayfaların rotalarını da ekleyebilirsiniz
       },
@@ -28,17 +28,19 @@ class TeacherHome extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class TeacherPage extends StatefulWidget {
+  final String lecturerId; // ÖĞRENCİ ID
+  const TeacherPage({required this.lecturerId, super.key});
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _TeacherPageState createState() => _TeacherPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _TeacherPageState extends State<TeacherPage> {
   String formattedDateTime =
       ''; // Saat bilgisini saklamak için bir değişken tanımladık
-  late Timer _timer; // Timer nesnesini burada tanımlıyoruz
+  late Timer _timer;
+  String teacherName = ''; // Timer nesnesini burada tanımlıyoruz
 
   @override
   void initState() {
@@ -54,6 +56,27 @@ class _MyHomePageState extends State<MyHomePage> {
     // Başlangıçta saat bilgisini de güncelliyoruz
     formattedDateTime =
         DateFormat('dd MMMM yyy\nHH:mm', 'tr_TR').format(DateTime.now());
+    FirebaseFirestore.instance
+        .collection('lecturers')
+        .doc(widget.lecturerId)
+        .get()
+        .then((DocumentSnapshot snapshot) {
+      if (snapshot.exists) {
+        setState(() {
+          teacherName = (snapshot.data() as Map<String, dynamic>)[
+              'name']; // Firestore'daki 'name' alanından değeri al
+        });
+      } else {
+        setState(() {
+          teacherName =
+              'Bilinmeyen Öğretmen'; // Eğer belge bulunamazsa varsayılan değeri kullan
+        });
+      }
+    }).catchError((error) {
+      setState(() {
+        teacherName = 'Hata: $error'; // Hata durumunda hata mesajını kullan
+      });
+    });
   }
 
   @override
@@ -65,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final FirebaseFirestore firestore =
-        FirebaseFirestore.instance; //FİRESTORE CONNECTİON
+        FirebaseFirestore.instance; // Firestore bağlantısı
 
     return Scaffold(
       drawer: Drawer(
@@ -83,8 +106,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          width: 100, // Genişlik
-                          height: 100, // Yükseklik
+                          width: 100,
+                          height: 100,
                           padding: EdgeInsets.zero,
                           decoration: const BoxDecoration(
                             image: DecorationImage(
@@ -123,7 +146,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const QRyoklamasistemi(),
+                        builder: (context) =>
+                            const TeacherHome(), // Bu sınıfın mevcut olduğundan emin olun
                       ),
                     );
                   },
@@ -165,12 +189,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                 ),
               ),
-              const Row(
+              Row(
                 children: [
                   Padding(
                     padding: EdgeInsets.all(24.0),
                     child: Text(
-                      "Hoş Geldiniz\nSn. İsim Soyisim",
+                      "Hoş Geldiniz\n$teacherName",
                       style: TextStyle(color: Colors.white, fontSize: 30),
                     ),
                   ),
@@ -203,26 +227,28 @@ class _MyHomePageState extends State<MyHomePage> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const Column(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(padding: EdgeInsets.only(top: 20.0)),
-                          Text(
+                          const Padding(padding: EdgeInsets.only(top: 20.0)),
+                          const Text(
                             "Derslerim",
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          SizedBox(height: 0),
-                          /*Expanded(
-                            child: StreamBuilder<QuerySnapshot>(
-                              stream:
-                                  firestore.collection('classes').snapshots(),
+                          const SizedBox(height: 0),
+                          Expanded(
+                            child: FutureBuilder<DocumentSnapshot>(
+                              future: firestore
+                                  .collection('lecturers')
+                                  .doc(widget.lecturerId)
+                                  .get(),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return Center(
+                                  return const Center(
                                       child: CircularProgressIndicator());
                                 }
 
@@ -231,86 +257,28 @@ class _MyHomePageState extends State<MyHomePage> {
                                       child: Text('Error: ${snapshot.error}'));
                                 }
 
-                                final data = snapshot.data;
-
-                                if (data == null || data.docs.isEmpty) {
-                                  return Center(child: Text('Veri Yok'));
+                                if (!snapshot.hasData ||
+                                    !snapshot.data!.exists) {
+                                  return const Center(
+                                      child: Text('No data found'));
                                 }
 
+                                var studentData = snapshot.data!.data()
+                                    as Map<String, dynamic>;
+                                List<String> classes =
+                                    List<String>.from(studentData['classes']);
+
                                 return ListView.builder(
-                                  itemCount: data.docs.length,
+                                  itemCount: classes.length,
                                   itemBuilder: (context, index) {
-                                    final doc = data.docs[index];
-                                    final dersAd = doc['hafta1'] ?? 'No Name';
-
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        border: BorderDirectional(
-                                            top: BorderSide()),
-                                      ),
-                                      child: ExpansionTile(
-                                        title: Text(
-                                          dersAd,
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                        children: [
-                                          StreamBuilder<QuerySnapshot>(
-                                            stream: doc.reference
-                                                .collection('topics')
-                                                .snapshots(),
-                                            builder: (context, snapshot) {
-                                              if (snapshot.connectionState ==
-                                                  ConnectionState.waiting) {
-                                                return Center(
-                                                    child:
-                                                        CircularProgressIndicator());
-                                              }
-
-                                              if (snapshot.hasError) {
-                                                return Center(
-                                                    child: Text(
-                                                        'Error: ${snapshot.error}'));
-                                              }
-
-                                              final topicsData = snapshot.data;
-
-                                              if (topicsData == null ||
-                                                  topicsData.docs.isEmpty) {
-                                                return Center(
-                                                    child: Text('Veri Yok'));
-                                              }
-
-                                              return ListView.builder(
-                                                shrinkWrap: true,
-                                                itemCount:
-                                                    topicsData.docs.length,
-                                                itemBuilder:
-                                                    (context, topicIndex) {
-                                                  final topicDoc = topicsData
-                                                      .docs[topicIndex];
-                                                  final topicAd =
-                                                      topicDoc['ad'] ??
-                                                          'No Topic Name';
-
-                                                  return ListTile(
-                                                    title: Text(
-                                                      topicAd,
-                                                      style: TextStyle(
-                                                          color: Colors.black),
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            },
-                                          ),
-                                        ],
-                                      ),
+                                    return ListTile(
+                                      title: Text(classes[index]),
                                     );
                                   },
                                 );
                               },
                             ),
-                          ),*/
+                          )
                         ],
                       ),
                     ),
@@ -330,12 +298,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           borderRadius: BorderRadius.circular(10)),
                       child: GestureDetector(
                         onTap: () {
+                          // QR Okuma ekranına yönlendir
                           /* Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const QRyoklamasistemi(),
                             ),
-                          ); */ // QR Okuma ekranına yönlendir
+                          ); */
                         },
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,

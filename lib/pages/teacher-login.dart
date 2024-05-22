@@ -80,7 +80,8 @@ class _LoginPageState extends State<TeacherLoginPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const TeacherHome(),
+                builder: (context) =>
+                    TeacherPage(lecturerId: lecturerSnapshot.id),
               ),
             );
           } else {
