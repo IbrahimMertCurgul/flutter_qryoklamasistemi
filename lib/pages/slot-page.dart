@@ -6,7 +6,7 @@ void main() {
 }
 
 class SlotsPage extends StatelessWidget {
-  const SlotsPage({Key? key}) : super(key: key);
+  const SlotsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class Slots extends StatelessWidget {
   final List<String> weeks = List.generate(12, (index) => 'Hafta ${index + 1}');
   final String lecturerID; // lecturerID burada tanımlandı
 
-  Slots({Key? key, required this.lecturerID}) : super(key: key);
+  Slots({super.key, required this.lecturerID});
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +108,7 @@ class Slots extends StatelessWidget {
 class WeekTile extends StatefulWidget {
   final String week;
 
-  const WeekTile({Key? key, required this.week}) : super(key: key);
+  const WeekTile({super.key, required this.week});
 
   @override
   _WeekTileState createState() => _WeekTileState();

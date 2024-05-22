@@ -146,7 +146,7 @@ class _TeacherPageState extends State<TeacherPage> {
                         const SizedBox(height: 10),
                         Text(
                           teacherEmail,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16,
                           ),
@@ -312,11 +312,12 @@ class _TeacherPageState extends State<TeacherPage> {
                                       child: Container(
                                         decoration: BoxDecoration(
                                           border: Border(
-                                            top: BorderSide(
+                                            top: const BorderSide(
                                                 color: Colors
                                                     .grey), // Her öğe için üst kenarlık
                                             bottom: index == classes.length - 1
-                                                ? BorderSide(color: Colors.grey)
+                                                ? const BorderSide(
+                                                    color: Colors.grey)
                                                 : BorderSide
                                                     .none, // Son öğe için alt kenarlık, diğerleri için yok
                                           ),
