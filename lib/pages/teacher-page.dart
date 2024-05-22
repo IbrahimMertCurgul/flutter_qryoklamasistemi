@@ -3,6 +3,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart'; // Intl kütüphanesini ekledik
 import 'dart:async'; // Timer sınıfını kullanmak için ekledik
 import 'package:flutter_qryoklamasistemi/main.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'slot-page.dart';
 
 void main() {
@@ -11,7 +12,7 @@ void main() {
 }
 
 class TeacherHome extends StatelessWidget {
-  const TeacherHome({Key? key}) : super(key: key);
+  const TeacherHome({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +20,8 @@ class TeacherHome extends StatelessWidget {
       title: 'Öğretmen Ana-Sayfa',
       initialRoute: '/',
       routes: {
-        '/': (context) => MyHomePage(), // Ana sayfa buraya gelecek
-        '/slot-page': (context) => SlotPage(), // SlotPage sayfası
+        '/': (context) => const MyHomePage(), // Ana sayfa buraya gelecek
+        '/slot-page': (context) => const SlotPage(), // SlotPage sayfası
         // Diğer sayfaların rotalarını da ekleyebilirsiniz
       },
     );
@@ -28,7 +29,7 @@ class TeacherHome extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -43,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     // Zamanlayıcıyı başlatmak için initState içinde Timer.periodic'i kullanıyoruz
-    _timer = Timer.periodic(Duration(minutes: 1), (timer) {
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
       // Saat bilgisini her dakika başında güncelliyoruz
       setState(() {
         formattedDateTime =
@@ -63,6 +64,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseFirestore firestore =
+        FirebaseFirestore.instance; //FİRESTORE CONNECTİON
+
     return Scaffold(
       drawer: Drawer(
         child: Column(
@@ -72,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: EdgeInsets.zero,
                 children: <Widget>[
                   DrawerHeader(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Color.fromARGB(255, 138, 35, 50),
                     ),
                     child: Column(
@@ -82,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: 100, // Genişlik
                           height: 100, // Yükseklik
                           padding: EdgeInsets.zero,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             image: DecorationImage(
                               image:
                                   AssetImage("assets/images/topkapilogo.png"),
@@ -90,8 +94,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
-                        Text(
+                        const SizedBox(height: 10),
+                        const Text(
                           'example@topkapi.com',
                           style: TextStyle(
                             color: Colors.white,
@@ -106,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Center(
               child: Container(
-                margin: EdgeInsets.all(16.0),
+                margin: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.grey,
@@ -123,8 +127,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     );
                   },
-                  child: ListTile(
-                    title: const Center(child: Text('Çıkış')),
+                  child: const ListTile(
+                    title: Center(child: Text('Çıkış')),
                   ),
                 ),
               ),
@@ -161,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                 ),
               ),
-              Row(
+              const Row(
                 children: [
                   Padding(
                     padding: EdgeInsets.all(24.0),
@@ -179,10 +183,10 @@ class _MyHomePageState extends State<MyHomePage> {
               Row(
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(24, 0, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
                     child: Text(
                       formattedDateTime,
-                      style: TextStyle(color: Colors.white, fontSize: 26),
+                      style: const TextStyle(color: Colors.white, fontSize: 26),
                     ),
                   ),
                 ],
@@ -199,10 +203,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Column(
+                      child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(padding: const EdgeInsets.only(top: 20.0)),
+                          Padding(padding: EdgeInsets.only(top: 20.0)),
                           Text(
                             "Derslerim",
                             style: TextStyle(
@@ -211,34 +215,102 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                           SizedBox(height: 0),
-                          Expanded(
-                            child: ListView.builder(
-                              itemCount: 10,
-                              itemBuilder: (BuildContext context, int index) {
-                                if (index == 0) {
-                                  return SizedBox.shrink();
+                          /*Expanded(
+                            child: StreamBuilder<QuerySnapshot>(
+                              stream:
+                                  firestore.collection('classes').snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
                                 }
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    border:
-                                        BorderDirectional(top: BorderSide()),
-                                  ),
-                                  child: ListTile(
-                                    onTap: () {
-                                      if (index == 1) {
-                                        Navigator.pushNamed(
-                                            context, '/slot-page');
-                                      }
-                                    },
-                                    title: Text(
-                                      'Ders $index',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
+
+                                if (snapshot.hasError) {
+                                  return Center(
+                                      child: Text('Error: ${snapshot.error}'));
+                                }
+
+                                final data = snapshot.data;
+
+                                if (data == null || data.docs.isEmpty) {
+                                  return Center(child: Text('Veri Yok'));
+                                }
+
+                                return ListView.builder(
+                                  itemCount: data.docs.length,
+                                  itemBuilder: (context, index) {
+                                    final doc = data.docs[index];
+                                    final dersAd = doc['hafta1'] ?? 'No Name';
+
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        border: BorderDirectional(
+                                            top: BorderSide()),
+                                      ),
+                                      child: ExpansionTile(
+                                        title: Text(
+                                          dersAd,
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                        children: [
+                                          StreamBuilder<QuerySnapshot>(
+                                            stream: doc.reference
+                                                .collection('topics')
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return Center(
+                                                    child:
+                                                        CircularProgressIndicator());
+                                              }
+
+                                              if (snapshot.hasError) {
+                                                return Center(
+                                                    child: Text(
+                                                        'Error: ${snapshot.error}'));
+                                              }
+
+                                              final topicsData = snapshot.data;
+
+                                              if (topicsData == null ||
+                                                  topicsData.docs.isEmpty) {
+                                                return Center(
+                                                    child: Text('Veri Yok'));
+                                              }
+
+                                              return ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount:
+                                                    topicsData.docs.length,
+                                                itemBuilder:
+                                                    (context, topicIndex) {
+                                                  final topicDoc = topicsData
+                                                      .docs[topicIndex];
+                                                  final topicAd =
+                                                      topicDoc['ad'] ??
+                                                          'No Topic Name';
+
+                                                  return ListTile(
+                                                    title: Text(
+                                                      topicAd,
+                                                      style: TextStyle(
+                                                          color: Colors.black),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
                                 );
                               },
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                     ),
@@ -265,7 +337,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ); */ // QR Okuma ekranına yönlendir
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(

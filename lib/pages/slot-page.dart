@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_qryoklamasistemi/main.dart';
 import 'teacher-page.dart';
 
 void main() {
-  runApp(SlotPage());
+  runApp(const SlotPage());
 }
 
 class SlotPage extends StatelessWidget {
+  const SlotPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,16 +15,18 @@ class SlotPage extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: slotsPage(),
       routes: {
-        '/teacher-page': (context) => TeacherHome(), // TeacherHome sayfası
+        '/teacher-page': (context) => const TeacherHome(), // TeacherHome sayfası
       },
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class slotsPage extends StatelessWidget {
   final List<String> weeks = List.generate(12, (index) => 'Hafta ${index + 1}');
+
+  slotsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false, // Varsayılan geri butonunu kaldır
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
                 Color.fromARGB(255, 138, 35, 50),
@@ -44,12 +47,12 @@ class MyHomePage extends StatelessWidget {
           child: Row(
             children: [
               IconButton(
-                icon: Icon(Icons.arrow_back, color: Colors.white),
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () {
                   Navigator.pushNamed(context, '/teacher-page');
                 },
               ),
-              SizedBox(
+              const SizedBox(
                   width: 110), // Geri butonu ile logo arasında biraz boşluk
               Image.asset(
                 'assets/images/topkapilogo.png', // PNG resminizin yolu
@@ -62,7 +65,7 @@ class MyHomePage extends StatelessWidget {
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
               Color.fromARGB(255, 138, 35, 50),
@@ -92,20 +95,21 @@ class MyHomePage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            QRyoklamasistemi()), // QRyoklamasistemi sayfasına geçiş
+                            const TeacherHome()), // QRyoklamasistemi sayfasına geçiş
                   );
                 },
-                child: Text('Çıkış'),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white.withOpacity(0.8),
-                  onPrimary: Colors.black,
+                  backgroundColor:
+                      Colors.white.withOpacity(0.8), // Correct property name
+                  foregroundColor: Colors.black, // Correct property name
                   shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.circular(16.0), // Köşeleri hafif yuvarlat
                   ),
-                  padding: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                       horizontal: 32.0, vertical: 12.0), // Buton boyutları
                 ),
+                child: const Text('Çıkış'),
               ),
             ),
           ],
@@ -118,7 +122,7 @@ class MyHomePage extends StatelessWidget {
 class WeekTile extends StatefulWidget {
   final String week;
 
-  WeekTile({required this.week});
+  const WeekTile({super.key, required this.week});
 
   @override
   _WeekTileState createState() => _WeekTileState();
@@ -136,7 +140,7 @@ class _WeekTileState extends State<WeekTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(8.0),
+      margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.white, width: 2),
         borderRadius: BorderRadius.circular(8.0),
@@ -147,13 +151,13 @@ class _WeekTileState extends State<WeekTile> {
           ListTile(
             title: Text(
               widget.week,
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
             ),
             onTap: _toggleExpand,
           ),
           if (_isExpanded)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
               child: Text(
                 'Bu hafta için detaylar buraya gelecek.',
                 style: TextStyle(color: Colors.white),

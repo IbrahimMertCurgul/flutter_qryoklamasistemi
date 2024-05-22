@@ -10,7 +10,7 @@ void main() {
 }
 
 class StudentHome extends StatelessWidget {
-  const StudentHome({Key? key}) : super(key: key);
+  const StudentHome({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class StudentHome extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -37,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     // Zamanlayıcıyı başlatmak için initState içinde Timer.periodic'i kullanıyoruz
-    _timer = Timer.periodic(Duration(minutes: 1), (timer) {
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
       // Saat bilgisini her dakika başında güncelliyoruz
       setState(() {
         formattedDateTime =
@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 padding: EdgeInsets.zero,
                 children: <Widget>[
                   DrawerHeader(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Color.fromARGB(255, 138, 35, 50),
                     ),
                     child: Column(
@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: 100, // Genişlik
                           height: 100, // Yükseklik
                           padding: EdgeInsets.zero,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             image: DecorationImage(
                               image:
                                   AssetImage("assets/images/topkapilogo.png"),
@@ -84,8 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
-                        Text(
+                        const SizedBox(height: 10),
+                        const Text(
                           'example@topkapi.com',
                           style: TextStyle(
                             color: Colors.white,
@@ -100,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Center(
               child: Container(
-                margin: EdgeInsets.all(16.0),
+                margin: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Colors.grey,
@@ -118,8 +118,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     );
                     // Çıkış butonuna tıklandığında yapılacak işlemler
                   },
-                  child: ListTile(
-                    title: const Center(child: Text('Çıkış')),
+                  child: const ListTile(
+                    title: Center(child: Text('Çıkış')),
                   ),
                 ),
               ),
@@ -156,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                 ),
               ),
-              Row(
+              const Row(
                 children: [
                   Padding(
                     padding: EdgeInsets.all(24.0),
@@ -174,10 +174,10 @@ class _MyHomePageState extends State<MyHomePage> {
               Row(
                 children: [
                   Padding(
-                    padding: EdgeInsets.fromLTRB(24, 0, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(24, 0, 0, 0),
                     child: Text(
                       formattedDateTime,
-                      style: TextStyle(color: Colors.white, fontSize: 26),
+                      style: const TextStyle(color: Colors.white, fontSize: 26),
                     ),
                   ),
                 ],
@@ -197,31 +197,31 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(padding: const EdgeInsets.only(top: 20.0)),
-                          Text(
+                          const Padding(padding: EdgeInsets.only(top: 20.0)),
+                          const Text(
                             "Derslerim",
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          SizedBox(height: 0),
+                          const SizedBox(height: 0),
                           Expanded(
                             child: ListView.builder(
                               itemCount: 10,
                               itemBuilder: (BuildContext context, int index) {
                                 if (index == 0) {
-                                  return SizedBox.shrink();
+                                  return const SizedBox.shrink();
                                 }
                                 return Container(
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     border:
                                         BorderDirectional(top: BorderSide()),
                                   ),
                                   child: ListTile(
                                     title: Text(
-                                      'Ders ${index}',
-                                      style: TextStyle(color: Colors.black),
+                                      'Ders $index',
+                                      style: const TextStyle(color: Colors.black),
                                     ),
                                   ),
                                 );
@@ -249,7 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         onTap: () {
                           // QR Okuma ekranına yönlendir
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(

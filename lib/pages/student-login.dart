@@ -23,7 +23,7 @@ class _LoginPageState extends State<StudentLoginPage> {
   final CollectionReference _studentsCollection =
       FirebaseFirestore.instance.collection('students');
 
-  Widget _entryField(
+  Widget _entryUser(
     String title,
     TextEditingController controller,
   ) {
@@ -39,6 +39,22 @@ class _LoginPageState extends State<StudentLoginPage> {
     );
   }
 
+  Widget _entryPass(
+    String title,
+    TextEditingController controller,
+  ) {
+    return TextField(
+      controller: controller,
+      obscureText: true, //ŞİFREYİ GİZLİ YAPMA
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        labelText: 'Şifre',
+      ),
+    );
+  }
+
   Future<void> _signIn() async {
     final String studentNumber = _controllerNumber.text;
     final String password = _controllerPass.text;
@@ -46,7 +62,7 @@ class _LoginPageState extends State<StudentLoginPage> {
     try {
       QuerySnapshot<Map<String, dynamic>> studentSnapshots =
           await _studentsCollection
-              .where('studentNumber', isEqualTo: studentNumber)
+              .where('number', isEqualTo: studentNumber)
               .get() as QuerySnapshot<Map<String, dynamic>>;
 
       if (studentSnapshots.docs.isNotEmpty) {
@@ -64,7 +80,7 @@ class _LoginPageState extends State<StudentLoginPage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => StudentHome(),
+                builder: (context) => const StudentHome(),
               ),
             );
           } else {
@@ -150,11 +166,11 @@ class _LoginPageState extends State<StudentLoginPage> {
                           ////////////////////////////ÖĞRENCİ INPUT/////////////////////////////////
                           Padding(
                               padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
-                              child: _entryField("email", _controllerNumber)),
+                              child: _entryUser("number", _controllerNumber)),
                           ////////////////////////////ŞİFRE INPUT/////////////////////////////////
                           Padding(
                               padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                              child: _entryField("password", _controllerPass)),
+                              child: _entryPass("password", _controllerPass)),
                         ],
                       ),
                     ),

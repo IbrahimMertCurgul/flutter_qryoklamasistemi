@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, file_names
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'teacher-page.dart'; // TeacherHomePage sayfasının import edildiği yer
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -9,13 +10,93 @@ void main() {
 }
 
 class TeacherLoginPage extends StatefulWidget {
-  const TeacherLoginPage({Key? key}) : super(key: key);
+  const TeacherLoginPage({super.key});
 
   @override
   State<TeacherLoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<TeacherLoginPage> {
+  final TextEditingController _controllerUser = TextEditingController();
+  final TextEditingController _controllerPass = TextEditingController();
+
+  final CollectionReference _lecturersCollection =
+      FirebaseFirestore.instance.collection('lecturers');
+
+  Widget _entryUser(
+    String title,
+    TextEditingController controller,
+  ) {
+    return TextField(
+      controller: controller,
+      obscureText: false,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        labelText: 'Kullanıcı Adı',
+      ),
+    );
+  }
+
+  Widget _entryPass(
+    String title,
+    TextEditingController controller,
+  ) {
+    return TextField(
+      controller: controller,
+      obscureText: true, //ŞİFREYİ GİZLİ YAPMA
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        labelText: 'Şifre',
+      ),
+    );
+  }
+
+  Future<void> _signIn() async {
+    final String username = _controllerUser.text;
+    final String password = _controllerPass.text;
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> lecturerSnapshots =
+          await _lecturersCollection
+              .where('username', isEqualTo: username)
+              .get() as QuerySnapshot<Map<String, dynamic>>;
+
+      if (lecturerSnapshots.docs.isNotEmpty) {
+        // Öğrenci numarası ile eşleşen bir döküman bulundu
+        final DocumentSnapshot<Map<String, dynamic>> lecturerSnapshot =
+            lecturerSnapshots.docs.first;
+
+        final Map<String, dynamic>? data = lecturerSnapshot.data();
+
+        // Veri null değilse kontrol et
+        if (data != null) {
+          // Şifreyi kontrol et
+          if (data['password'] == password) {
+            // Giriş başarılı olduğunda MyHomePage sayfasına yönlendir
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const TeacherHome(),
+              ),
+            );
+          } else {
+            print('Hatalı şifre');
+          }
+        } else {
+          print('Hata: Veri bulunamadı');
+        }
+      } else {
+        print('Öğrenci bulunamadı');
+      }
+    } catch (e) {
+      print('Hata: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size, height, width;
@@ -79,54 +160,28 @@ class _LoginPageState extends State<TeacherLoginPage> {
                               ],
                             ),
                           ),
+                          ////////////////////////////ÖĞRENCİ INPUT/////////////////////////////////
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
-                            child: TextField(
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                                labelText: 'Kullanıcı Adı',
-                              ),
-                            ),
-                          ),
+                              padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
+                              child: _entryUser("username", _controllerUser)),
+                          ////////////////////////////ŞİFRE INPUT/////////////////////////////////
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                            child: TextField(
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                                labelText: 'Şifre',
-                              ),
-                            ),
-                          ),
+                              padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                              child: _entryPass("password", _controllerPass)),
                         ],
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(40.0),
-                      child: SizedBox(
-                        height: 40.0,
-                        width: 150.0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color: const Color.fromARGB(255, 255, 255, 255),
+                        padding: const EdgeInsets.all(40.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _signIn();
+                          },
+                          child: const Text(
+                            'Giriş Yap',
+                            style: TextStyle(fontSize: 20, color: Colors.black),
                           ),
-                          child: ElevatedButton(
-                            onPressed: _signInWithEmailAndPassword,
-                            child: const Text(
-                              'Giriş Yap',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.black),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                        )),
                   ],
                 )
               else
@@ -238,7 +293,7 @@ class _LoginPageState extends State<TeacherLoginPage> {
     // Oturum açma işlemi başarılı olduktan sonra TeacherHomePage sayfasına geçiş yapalım:
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => TeacherHome()),
+      MaterialPageRoute(builder: (context) => const TeacherHome()),
     );
   }
 }
