@@ -58,7 +58,6 @@ class _LoginPageState extends State<StudentLoginPage> {
   Future<void> _signIn() async {
     final String studentNumber = _controllerNumber.text;
     final String password = _controllerPass.text;
-    final String _user = _controllerNumber.text;
 
     try {
       QuerySnapshot<Map<String, dynamic>> studentSnapshots =

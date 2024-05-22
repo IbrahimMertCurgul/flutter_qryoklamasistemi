@@ -21,7 +21,7 @@ class TeacherHome extends StatelessWidget {
       routes: {
         '/': (context) => const TeacherPage(
             lecturerId: '2ejyrhmrJVdLfDCyjF8n'), // Ana sayfa buraya gelecek
-        '/slot-page': (context) => const SlotPage(), // SlotPage sayfası
+        '/slot-page': (context) => const SlotsPage(), // SlotPage sayfası
         // Diğer sayfaların rotalarını da ekleyebilirsiniz
       },
     );
@@ -39,8 +39,33 @@ class TeacherPage extends StatefulWidget {
 class _TeacherPageState extends State<TeacherPage> {
   String formattedDateTime =
       ''; // Saat bilgisini saklamak için bir değişken tanımladık
-  late Timer _timer;
-  String teacherName = ''; // Timer nesnesini burada tanımlıyoruz
+  late Timer _timer; // Timer nesnesini burada tanımlıyoruz
+  String teacherName = ''; //Öğretmen ismi
+  String teacherEmail = ''; //öğretmen maili
+
+  Future<String> getTeacherImage(String lecturerId) async {
+    String defaultImage =
+        "assets/images/default_image.png"; // Varsayılan bir resim
+
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('lecturers')
+          .doc(lecturerId)
+          .get();
+
+      if (snapshot.exists) {
+        Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+        if (data.containsKey('img')) {
+          // 'img' alanı mevcutsa resim referansını döndür
+          return data['img'];
+        }
+      }
+    } catch (e) {
+      print("Error getting teacher image: $e");
+    }
+
+    return defaultImage; // Hata durumunda veya resim bulunamadığında varsayılan resmi döndür
+  }
 
   @override
   void initState() {
@@ -63,8 +88,9 @@ class _TeacherPageState extends State<TeacherPage> {
         .then((DocumentSnapshot snapshot) {
       if (snapshot.exists) {
         setState(() {
-          teacherName = (snapshot.data() as Map<String, dynamic>)[
-              'name']; // Firestore'daki 'name' alanından değeri al
+          teacherName = (snapshot.data() as Map<String, dynamic>)['name'];
+          teacherEmail = (snapshot.data() as Map<String, dynamic>)[
+              'email']; // Firestore'daki 'name' alanından değeri al
         });
       } else {
         setState(() {
@@ -118,8 +144,8 @@ class _TeacherPageState extends State<TeacherPage> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        const Text(
-                          'example@topkapi.com',
+                        Text(
+                          teacherEmail,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -192,13 +218,13 @@ class _TeacherPageState extends State<TeacherPage> {
               Row(
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(24.0),
+                    padding: const EdgeInsets.all(24.0),
                     child: Text(
                       "Hoş Geldiniz\n$teacherName",
-                      style: TextStyle(color: Colors.white, fontSize: 30),
+                      style: const TextStyle(color: Colors.white, fontSize: 30),
                     ),
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: Icon(Icons.person, size: 65, color: Colors.white),
                   )
@@ -271,8 +297,34 @@ class _TeacherPageState extends State<TeacherPage> {
                                 return ListView.builder(
                                   itemCount: classes.length,
                                   itemBuilder: (context, index) {
-                                    return ListTile(
-                                      title: Text(classes[index]),
+                                    return GestureDetector(
+                                      onTap: () {
+                                        // 'slotsPage' sayfasına yönlendir
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => Slots(
+                                              lecturerID: widget.lecturerId,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border(
+                                            top: BorderSide(
+                                                color: Colors
+                                                    .grey), // Her öğe için üst kenarlık
+                                            bottom: index == classes.length - 1
+                                                ? BorderSide(color: Colors.grey)
+                                                : BorderSide
+                                                    .none, // Son öğe için alt kenarlık, diğerleri için yok
+                                          ),
+                                        ),
+                                        child: ListTile(
+                                          title: Text(classes[index]),
+                                        ),
+                                      ),
                                     );
                                   },
                                 );

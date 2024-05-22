@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'teacher-page.dart';
 
 void main() {
-  runApp(const SlotPage());
+  runApp(const SlotsPage());
 }
 
-class SlotPage extends StatelessWidget {
-  const SlotPage({super.key});
+class SlotsPage extends StatelessWidget {
+  const SlotsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,18 +15,21 @@ class SlotPage extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: slotsPage(),
+      home: Slots(
+          lecturerID: 'your_lecturer_id'), // lecturerID değeri buraya ekleniyor
       routes: {
-        '/teacher-page': (context) => const TeacherHome(), // TeacherHome sayfası
+        '/teacher-page': (context) =>
+            const TeacherHome(), // TeacherHome sayfası
       },
     );
   }
 }
 
-class slotsPage extends StatelessWidget {
+class Slots extends StatelessWidget {
   final List<String> weeks = List.generate(12, (index) => 'Hafta ${index + 1}');
+  final String lecturerID; // lecturerID burada tanımlandı
 
-  slotsPage({super.key});
+  Slots({Key? key, required this.lecturerID}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,17 +52,27 @@ class slotsPage extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/teacher-page');
+                  Navigator.pushReplacement(
+                    // PushReplacement kullanıldı
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const TeacherHome(), // TeacherHome sayfasına geri dön
+                    ),
+                  );
                 },
               ),
               const SizedBox(
-                  width: 110), // Geri butonu ile logo arasında biraz boşluk
+                width: 100,
+              ), // Geri butonu ile logo arasında biraz boşluk
               Image.asset(
                 'assets/images/topkapilogo.png', // PNG resminizin yolu
                 fit: BoxFit.contain,
                 height: 85.0, // AppBar yüksekliğiyle uyumlu olacak şekilde
               ),
-              Expanded(child: Container()), // Geriye kalan alanı doldurmak için
+              Expanded(
+                child: Container(),
+              ), // Geriye kalan alanı doldurmak için
             ],
           ),
         ),
@@ -85,33 +98,6 @@ class slotsPage extends StatelessWidget {
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  // Çıkış butonuna basıldığında yapılacak işlemler
-                  // Örneğin, uygulamadan çıkış yapmak için:
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            const TeacherHome()), // QRyoklamasistemi sayfasına geçiş
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      Colors.white.withOpacity(0.8), // Correct property name
-                  foregroundColor: Colors.black, // Correct property name
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(16.0), // Köşeleri hafif yuvarlat
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 32.0, vertical: 12.0), // Buton boyutları
-                ),
-                child: const Text('Çıkış'),
-              ),
-            ),
           ],
         ),
       ),
@@ -122,7 +108,7 @@ class slotsPage extends StatelessWidget {
 class WeekTile extends StatefulWidget {
   final String week;
 
-  const WeekTile({super.key, required this.week});
+  const WeekTile({Key? key, required this.week}) : super(key: key);
 
   @override
   _WeekTileState createState() => _WeekTileState();
