@@ -11,6 +11,7 @@ class SlotsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: '12 Haftalık Ders Slotu',
       theme: ThemeData(
         primarySwatch: Colors.blue,

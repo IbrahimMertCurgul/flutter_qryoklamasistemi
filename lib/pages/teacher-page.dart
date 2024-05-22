@@ -16,6 +16,7 @@ class TeacherHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Öğretmen Ana-Sayfa',
       initialRoute: '/',
       routes: {

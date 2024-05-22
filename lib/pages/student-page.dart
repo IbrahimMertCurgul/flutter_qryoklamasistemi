@@ -15,6 +15,7 @@ class StudentHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Öğrenci Ana-Sayfa',
       home: MyHomePage(),
     );
@@ -221,7 +222,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: ListTile(
                                     title: Text(
                                       'Ders $index',
-                                      style: const TextStyle(color: Colors.black),
+                                      style:
+                                          const TextStyle(color: Colors.black),
                                     ),
                                   ),
                                 );

@@ -13,7 +13,10 @@ void main() async {
   );
 
   runApp(
-    const MaterialApp(home: QRyoklamasistemi()),
+    const MaterialApp(
+      home: QRyoklamasistemi(),
+      debugShowCheckedModeBanner: false,
+    ),
   );
 }
 
