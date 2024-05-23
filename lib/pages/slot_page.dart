@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_qryoklamasistemi/pages/teacher_page.dart';
+import 'package:flutter_qryoklamasistemi/pages/lecturer_page.dart';
 
 class SlotsPage extends StatelessWidget {
   const SlotsPage({super.key});
@@ -46,7 +46,7 @@ class Slots extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => TeacherPage(
+                      builder: (context) => lecturerPage(
                         lecturerId: lecturerID,
                       ), // Öğretmen kimliğini belirt
                     ),

@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'teacher_page.dart'; // TeacherHomePage sayfasının import edildiği yer
+import 'lecturer_page.dart'; // LecturerPage sayfasının import edildiği yer
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
   initializeDateFormatting('tr_TR', ''); // Türkçe yerel ayarları başlatıyoruz
-  runApp(const TeacherLoginPage());
+  runApp(const LecturerLoginPage());
 }
 
-class TeacherLoginPage extends StatefulWidget {
-  const TeacherLoginPage({super.key});
+class LecturerLoginPage extends StatefulWidget {
+  const LecturerLoginPage({super.key});
 
   @override
-  State<TeacherLoginPage> createState() => _LoginPageState();
+  State<LecturerLoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<TeacherLoginPage> {
+class _LoginPageState extends State<LecturerLoginPage> {
   final TextEditingController _controllerUser = TextEditingController();
   final TextEditingController _controllerPass = TextEditingController();
 
@@ -44,7 +44,7 @@ class _LoginPageState extends State<TeacherLoginPage> {
   ) {
     return TextField(
       controller: controller,
-      obscureText: true, //ŞİFREYİ GİZLİ YAPMA
+      obscureText: true, //Şifreyi gizle
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -53,6 +53,8 @@ class _LoginPageState extends State<TeacherLoginPage> {
       ),
     );
   }
+
+  String _errorMessage = "";
 
   Future<void> _signIn() async {
     final String username = _controllerUser.text;
@@ -75,25 +77,38 @@ class _LoginPageState extends State<TeacherLoginPage> {
         if (data != null) {
           // Şifreyi kontrol et
           if (data['password'] == password) {
-            // Giriş başarılı olduğunda MyHomePage sayfasına yönlendir
+            // Giriş başarılı olduğunda LecturerPage sayfasına yönlendir
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    TeacherPage(lecturerId: lecturerSnapshot.id),
+                    lecturerPage(lecturerId: lecturerSnapshot.id),
               ),
             );
           } else {
-            print('Hatalı şifre');
+            // Hatalı şifre durumunda hata mesajını göster
+            setState(() {
+              _errorMessage = 'Hatalı şifre';
+            });
           }
         } else {
-          print('Hata: Veri bulunamadı');
+          // Veri bulunamadığında hata mesajını göster
+          setState(() {
+            _errorMessage = 'Hata: Veri bulunamadı';
+          });
         }
       } else {
-        print('Öğrenci bulunamadı');
+        // Öğretmen bulunamadığında hata mesajını göster
+        setState(() {
+          _errorMessage =
+              'Kayıt bulunamadı. Giriş bilgilerinizi kontrol ediniz.';
+        });
       }
     } catch (e) {
-      print('Hata: $e');
+      // Diğer hata durumlarında hata mesajını göster
+      setState(() {
+        _errorMessage = 'Hata: $e';
+      });
     }
   }
 
@@ -149,7 +164,7 @@ class _LoginPageState extends State<TeacherLoginPage> {
                                   fontSize: 24.0, color: Colors.black),
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: 'Öğretmen',
+                                  text: 'Öğretim Görevlisi',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 32.0),
@@ -172,16 +187,25 @@ class _LoginPageState extends State<TeacherLoginPage> {
                       ),
                     ),
                     Padding(
-                        padding: const EdgeInsets.all(40.0),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            _signIn();
-                          },
-                          child: const Text(
-                            'Giriş Yap',
-                            style: TextStyle(fontSize: 20, color: Colors.black),
-                          ),
-                        )),
+                      padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _signIn();
+                        },
+                        child: const Text(
+                          'Giriş Yap',
+                          style: TextStyle(fontSize: 20, color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    if (_errorMessage.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: Text(
+                          _errorMessage,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
                   ],
                 )
               else
@@ -210,7 +234,7 @@ class _LoginPageState extends State<TeacherLoginPage> {
                             const Padding(
                               padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
                               child: Text(
-                                "Öğretmen Girişi",
+                                "Öğretim Görevlisi Girişi",
                                 style: TextStyle(
                                     fontSize: 25,
                                     fontWeight: FontWeight.bold,
@@ -252,6 +276,14 @@ class _LoginPageState extends State<TeacherLoginPage> {
                                 ),
                               ),
                             ),
+                            if (_errorMessage.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 16),
+                                child: Text(
+                                  _errorMessage,
+                                  style: const TextStyle(color: Colors.red),
+                                ),
+                              ),
                           ],
                         ),
                       ),

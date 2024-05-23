@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_qryoklamasistemi/pages/lecturer_login.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'slot_page.dart';
 
-class TeacherPage extends StatefulWidget {
-  final String lecturerId; // ÖĞRENCİ ID
-  const TeacherPage({required this.lecturerId, super.key});
+class lecturerPage extends StatefulWidget {
+  final String lecturerId; // Öğretim görevlisi ID
+  const lecturerPage({required this.lecturerId, super.key});
 
   @override
-  _TeacherPageState createState() => _TeacherPageState();
+  _lecturerPageState createState() => _lecturerPageState();
 }
 
-class _TeacherPageState extends State<TeacherPage> {
-  String formattedDateTime =
-      ''; // Saat bilgisini saklamak için bir değişken tanımladık
+class _lecturerPageState extends State<lecturerPage> {
+  String formattedDateTime = ''; // Saat bilgisini saklayan değişken
   late Timer _timer; // Timer nesnesini burada tanımlıyoruz
-  String teacherName = ''; //Öğretmen ismi
-  String teacherEmail = ''; //öğretmen maili
+  String lecturerName = ''; //Öğretmen ismi
+  String lecturerEmail = ''; //öğretmen maili
 
   @override
   void initState() {
     super.initState();
-    // Zamanlayıcıyı başlatmak için initState içinde Timer.periodic'i kullanıyoruz
+    // Zamanlayıcıyı başlatma
     _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
       // Saat bilgisini her dakika başında güncelliyoruz
       setState(() {
@@ -33,6 +33,7 @@ class _TeacherPageState extends State<TeacherPage> {
     // Başlangıçta saat bilgisini de güncelliyoruz
     formattedDateTime =
         DateFormat('dd MMMM yyy\nHH:mm', 'tr_TR').format(DateTime.now());
+    //Firestore'dan email ve isim alma işlemleri:
     FirebaseFirestore.instance
         .collection('lecturers')
         .doc(widget.lecturerId)
@@ -40,19 +41,19 @@ class _TeacherPageState extends State<TeacherPage> {
         .then((DocumentSnapshot snapshot) {
       if (snapshot.exists) {
         setState(() {
-          teacherName = (snapshot.data() as Map<String, dynamic>)['name'];
-          teacherEmail = (snapshot.data() as Map<String, dynamic>)[
+          lecturerName = (snapshot.data() as Map<String, dynamic>)['name'];
+          lecturerEmail = (snapshot.data() as Map<String, dynamic>)[
               'email']; // Firestore'daki 'name' alanından değeri al
         });
       } else {
         setState(() {
-          teacherName =
+          lecturerName =
               'Bilinmeyen Öğretmen'; // Eğer belge bulunamazsa varsayılan değeri kullan
         });
       }
     }).catchError((error) {
       setState(() {
-        teacherName = 'Hata: $error'; // Hata durumunda hata mesajını kullan
+        lecturerName = 'Hata: $error'; // Hata durumunda hata mesajını kullan
       });
     });
   }
@@ -65,12 +66,12 @@ class _TeacherPageState extends State<TeacherPage> {
 
   @override
   Widget build(BuildContext context) {
-    final FirebaseFirestore firestore =
-        FirebaseFirestore.instance; // Firestore bağlantısı
+    // Firestore bağlantısı:
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     return MaterialApp(
       routes: {
-        '/teacher-page': (context) => TeacherPage(
+        '/teacher-page': (context) => lecturerPage(
               lecturerId: widget.lecturerId,
             ),
       },
@@ -82,6 +83,7 @@ class _TeacherPageState extends State<TeacherPage> {
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: <Widget>[
+                    //Drawer Kodları:
                     DrawerHeader(
                       decoration: const BoxDecoration(
                         color: Color.fromARGB(255, 138, 35, 50),
@@ -103,7 +105,7 @@ class _TeacherPageState extends State<TeacherPage> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            teacherEmail,
+                            lecturerEmail,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -113,6 +115,32 @@ class _TeacherPageState extends State<TeacherPage> {
                       ),
                     ),
                   ],
+                ),
+              ),
+              Center(
+                child: Container(
+                  margin: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const LecturerLoginPage(), // Bu sınıfın mevcut olduğundan emin olun
+                        ),
+                      );
+                    },
+                    child: const ListTile(
+                      title: Center(child: Text('Çıkış')),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -137,6 +165,7 @@ class _TeacherPageState extends State<TeacherPage> {
                   leading: Builder(
                     builder: (BuildContext context) {
                       return IconButton(
+                        //Drawer'ı aç:
                         icon: const Icon(Icons.menu),
                         color: Colors.white,
                         iconSize: 40,
@@ -152,7 +181,7 @@ class _TeacherPageState extends State<TeacherPage> {
                     Padding(
                       padding: const EdgeInsets.all(24.0),
                       child: Text(
-                        "Hoş Geldiniz\n$teacherName",
+                        "Hoş Geldiniz\n$lecturerName",
                         style:
                             const TextStyle(color: Colors.white, fontSize: 30),
                       ),
@@ -191,6 +220,7 @@ class _TeacherPageState extends State<TeacherPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Padding(padding: EdgeInsets.only(top: 20.0)),
+                            //Derslerim Bölümü
                             const Text(
                               "Derslerim",
                               style: TextStyle(
@@ -234,7 +264,7 @@ class _TeacherPageState extends State<TeacherPage> {
                                     itemBuilder: (context, index) {
                                       return GestureDetector(
                                         onTap: () {
-                                          // 'slotsPage' sayfasına yönlendir
+                                          // 'slots_page' sayfasına yönlendir
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(

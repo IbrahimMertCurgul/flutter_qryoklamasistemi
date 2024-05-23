@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_qryoklamasistemi/pages/teacher_login.dart';
+import 'package:flutter_qryoklamasistemi/pages/lecturer_login.dart';
 import 'pages/student_login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -73,7 +73,7 @@ class QRyoklamasistemi extends StatelessWidget {
                 ),
                 child: const Center(
                   child: Text(
-                    'ÖĞRENCİ',
+                    'Öğrenci',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -90,7 +90,7 @@ class QRyoklamasistemi extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            const TeacherLoginPage())); //const TeacherLoginPage()
+                            const LecturerLoginPage())); //const TeacherLoginPage()
               },
               child: Container(
                 height: 53,
@@ -102,7 +102,7 @@ class QRyoklamasistemi extends StatelessWidget {
                 ),
                 child: const Center(
                   child: Text(
-                    'ÖĞRETMEN',
+                    'Öğretim Görevlisi',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
