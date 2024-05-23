@@ -90,7 +90,7 @@ class QRyoklamasistemi extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            const TeacherLoginPage())); //const TeacherLoginPage()
+                            TeacherLoginPage())); //const TeacherLoginPage()
               },
               child: Container(
                 height: 53,

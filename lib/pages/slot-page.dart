@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'teacher-page.dart';
-
-void main() {
-  runApp(const SlotsPage());
-}
+import 'package:flutter_qryoklamasistemi/pages/teacher-page.dart';
 
 class SlotsPage extends StatelessWidget {
   const SlotsPage({super.key});
@@ -16,12 +12,6 @@ class SlotsPage extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Slots(
-          lecturerID: 'your_lecturer_id'), // lecturerID değeri buraya ekleniyor
-      routes: {
-        '/teacher-page': (context) =>
-            const TeacherHome(), // TeacherHome sayfası
-      },
     );
   }
 }
@@ -30,7 +20,7 @@ class Slots extends StatelessWidget {
   final List<String> weeks = List.generate(12, (index) => 'Hafta ${index + 1}');
   final String lecturerID; // lecturerID burada tanımlandı
 
-  Slots({super.key, required this.lecturerID});
+  Slots({Key? key, required this.lecturerID}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +43,12 @@ class Slots extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    // PushReplacement kullanıldı
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          const TeacherHome(), // TeacherHome sayfasına geri dön
+                      builder: (context) => TeacherPage(
+                        lecturerId: lecturerID,
+                      ), // Öğretmen kimliğini belirt
                     ),
                   );
                 },

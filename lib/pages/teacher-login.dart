@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, file_names
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'teacher-page.dart'; // TeacherHomePage sayfasının import edildiği yer
@@ -6,12 +5,10 @@ import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
   initializeDateFormatting('tr_TR', ''); // Türkçe yerel ayarları başlatıyoruz
-  runApp(const TeacherLoginPage());
+  runApp(TeacherLoginPage());
 }
 
 class TeacherLoginPage extends StatefulWidget {
-  const TeacherLoginPage({super.key});
-
   @override
   State<TeacherLoginPage> createState() => _LoginPageState();
 }
@@ -66,7 +63,7 @@ class _LoginPageState extends State<TeacherLoginPage> {
               .get() as QuerySnapshot<Map<String, dynamic>>;
 
       if (lecturerSnapshots.docs.isNotEmpty) {
-        // Öğrenci numarası ile eşleşen bir döküman bulundu
+        // Username ile eşleşen bir döküman bulundu
         final DocumentSnapshot<Map<String, dynamic>> lecturerSnapshot =
             lecturerSnapshots.docs.first;
 
@@ -221,38 +218,15 @@ class _LoginPageState extends State<TeacherLoginPage> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 80, 0, 0),
                               child: SizedBox(
-                                width: 500,
-                                child: TextField(
-                                  obscureText: true,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: const Color.fromARGB(
-                                        255, 255, 255, 255),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                    labelText: 'Kullanıcı Adı',
-                                  ),
-                                ),
-                              ),
+                                  width: 500,
+                                  child: _entryUser(
+                                      "Kullanıcı Adı", _controllerUser)),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
                               child: SizedBox(
-                                width: 500,
-                                child: TextField(
-                                  obscureText: true,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: const Color.fromARGB(
-                                        255, 255, 255, 255),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                    labelText: 'Şifre',
-                                  ),
-                                ),
-                              ),
+                                  width: 500,
+                                  child: _entryPass("şifre", _controllerPass)),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(40.0),
@@ -266,7 +240,7 @@ class _LoginPageState extends State<TeacherLoginPage> {
                                         255, 255, 255, 255),
                                   ),
                                   child: ElevatedButton(
-                                    onPressed: _signInWithEmailAndPassword,
+                                    onPressed: _signIn,
                                     child: const Text(
                                       'Giriş Yap',
                                       style: TextStyle(
@@ -286,15 +260,6 @@ class _LoginPageState extends State<TeacherLoginPage> {
           ),
         ),
       ),
-    );
-  }
-
-  void _signInWithEmailAndPassword() {
-    // Burada oturum açma işlemlerini gerçekleştirebilirsiniz.
-    // Oturum açma işlemi başarılı olduktan sonra TeacherHomePage sayfasına geçiş yapalım:
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const TeacherHome()),
     );
   }
 }
