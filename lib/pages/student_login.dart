@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'student_page.dart';
+import 'student_page.dart'; // StudentPage sayfasının import edildiği yer
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
@@ -12,12 +12,11 @@ class StudentLoginPage extends StatefulWidget {
   const StudentLoginPage({super.key});
 
   @override
-  State<StudentLoginPage> createState() =>
-      _LoginPageState(); //login sayfasını _LoginPageState() a dönüştür
+  State<StudentLoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<StudentLoginPage> {
-  final TextEditingController _controllerNumber = TextEditingController();
+  final TextEditingController _controllerUser = TextEditingController();
   final TextEditingController _controllerPass = TextEditingController();
 
   final CollectionReference _studentsCollection =
@@ -45,7 +44,7 @@ class _LoginPageState extends State<StudentLoginPage> {
   ) {
     return TextField(
       controller: controller,
-      obscureText: true, //ŞİFREYİ GİZLİ YAPMA
+      obscureText: true, //Şifreyi gizle
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -55,18 +54,19 @@ class _LoginPageState extends State<StudentLoginPage> {
     );
   }
 
+  String _errorMessage = "";
+
   Future<void> _signIn() async {
-    final String studentNumber = _controllerNumber.text;
+    final String number = _controllerUser.text;
     final String password = _controllerPass.text;
 
     try {
       QuerySnapshot<Map<String, dynamic>> studentSnapshots =
-          await _studentsCollection
-              .where('number', isEqualTo: studentNumber)
-              .get() as QuerySnapshot<Map<String, dynamic>>;
+          await _studentsCollection.where('number', isEqualTo: number).get()
+              as QuerySnapshot<Map<String, dynamic>>;
 
       if (studentSnapshots.docs.isNotEmpty) {
-        // Öğrenci numarası ile eşleşen bir döküman bulundu
+        // Numara ile eşleşen bir döküman bulundu
         final DocumentSnapshot<Map<String, dynamic>> studentSnapshot =
             studentSnapshots.docs.first;
 
@@ -76,45 +76,56 @@ class _LoginPageState extends State<StudentLoginPage> {
         if (data != null) {
           // Şifreyi kontrol et
           if (data['password'] == password) {
-            // Giriş başarılı olduğunda MyHomePage sayfasına yönlendir
+            // Giriş başarılı olduğunda LecturerPage sayfasına yönlendir
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const StudentHome(),
+                builder: (context) =>
+                    StudentPage(studentId: studentSnapshot.id),
               ),
             );
           } else {
-            print('Hatalı şifre');
+            // Hatalı şifre durumunda hata mesajını göster
+            setState(() {
+              _errorMessage = 'Hatalı şifre';
+            });
           }
         } else {
-          print('Hata: Veri bulunamadı');
+          // Veri bulunamadığında hata mesajını göster
+          setState(() {
+            _errorMessage = 'Hata: Veri bulunamadı';
+          });
         }
       } else {
-        print('Öğrenci bulunamadı');
+        // Öğretmen bulunamadığında hata mesajını göster
+        setState(() {
+          _errorMessage =
+              'Kayıt bulunamadı. Giriş bilgilerinizi kontrol ediniz.';
+        });
       }
     } catch (e) {
-      print('Hata: $e');
+      // Diğer hata durumlarında hata mesajını göster
+      setState(() {
+        _errorMessage = 'Hata: $e';
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // ignore: no_leading_underscores_for_local_identifiers
     var size, height, width;
-    size = MediaQuery.of(context).size; //Ekran boyutları alma
+    size = MediaQuery.of(context).size;
     height = size.height;
     width = size.width;
     return Scaffold(
-      extendBodyBehindAppBar:
-          true, //Appbar transparanlaştırma işleminde kullanıldı
-      resizeToAvoidBottomInset: true, //SingleChildScrollView ile ilgili
+      extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (width < 700 &&
-                  width / height < 0.8) //MOBİLDE İF İÇİNDEKİ KODLAR GEÇERLİ
+              if (width < 700 && width / height < 0.8)
                 Column(
                   children: [
                     Container(
@@ -166,7 +177,7 @@ class _LoginPageState extends State<StudentLoginPage> {
                           ////////////////////////////ÖĞRENCİ INPUT/////////////////////////////////
                           Padding(
                               padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
-                              child: _entryUser("number", _controllerNumber)),
+                              child: _entryUser("number", _controllerUser)),
                           ////////////////////////////ŞİFRE INPUT/////////////////////////////////
                           Padding(
                               padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
@@ -175,7 +186,7 @@ class _LoginPageState extends State<StudentLoginPage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(40.0),
+                      padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
                       child: ElevatedButton(
                         onPressed: () {
                           _signIn();
@@ -186,9 +197,17 @@ class _LoginPageState extends State<StudentLoginPage> {
                         ),
                       ),
                     ),
+                    if (_errorMessage.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: Text(
+                          _errorMessage,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
                   ],
                 )
-              else //BİLGİSAYARDA ELSE İÇİNDEKİ KODLAR GEÇERLİ -------------------------
+              else
                 Container(
                   height: height,
                   decoration: const BoxDecoration(
@@ -221,43 +240,18 @@ class _LoginPageState extends State<StudentLoginPage> {
                                     color: Colors.white),
                               ),
                             ),
-                            ////////////////////////////ÖĞRENCİ INPUT/////////////////////////////////
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 80, 0, 0),
                               child: SizedBox(
-                                width: 500,
-                                child: TextField(
-                                  obscureText: true,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: const Color.fromARGB(
-                                        255, 255, 255, 255),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                    labelText: 'Öğrenci Numarası',
-                                  ),
-                                ),
-                              ),
+                                  width: 500,
+                                  child: _entryUser(
+                                      "Öğrenci numarası", _controllerUser)),
                             ),
-                            ////////////////////////////ŞİFRE INPUT/////////////////////////////////
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
                               child: SizedBox(
-                                width: 500,
-                                child: TextField(
-                                  obscureText: true,
-                                  decoration: InputDecoration(
-                                    filled: true,
-                                    fillColor: const Color.fromARGB(
-                                        255, 255, 255, 255),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(30.0),
-                                    ),
-                                    labelText: 'Şifre',
-                                  ),
-                                ),
-                              ),
+                                  width: 500,
+                                  child: _entryPass("Şifre", _controllerPass)),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(40.0),
@@ -281,12 +275,20 @@ class _LoginPageState extends State<StudentLoginPage> {
                                 ),
                               ),
                             ),
+                            if (_errorMessage.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 16),
+                                child: Text(
+                                  _errorMessage,
+                                  style: const TextStyle(color: Colors.red),
+                                ),
+                              ),
                           ],
                         ),
                       ),
                     ],
                   ),
-                )
+                ),
             ],
           ),
         ),

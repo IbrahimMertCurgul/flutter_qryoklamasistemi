@@ -4,16 +4,17 @@ import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'slot_page.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-class lecturerPage extends StatefulWidget {
+class LecturerPage extends StatefulWidget {
   final String lecturerId; // Öğretim görevlisi ID
-  const lecturerPage({required this.lecturerId, super.key});
+  const LecturerPage({required this.lecturerId, super.key});
 
   @override
-  _lecturerPageState createState() => _lecturerPageState();
+  _LecturerPageState createState() => _LecturerPageState();
 }
 
-class _lecturerPageState extends State<lecturerPage> {
+class _LecturerPageState extends State<LecturerPage> {
   String formattedDateTime = ''; // Saat bilgisini saklayan değişken
   late Timer _timer; // Timer nesnesini burada tanımlıyoruz
   String lecturerName = ''; //Öğretmen ismi
@@ -22,6 +23,7 @@ class _lecturerPageState extends State<lecturerPage> {
   @override
   void initState() {
     super.initState();
+    initializeDateFormatting('tr_TR', ''); // DateFormat için tr_TR dil
     // Zamanlayıcıyı başlatma
     _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
       // Saat bilgisini her dakika başında güncelliyoruz
@@ -71,7 +73,7 @@ class _lecturerPageState extends State<lecturerPage> {
 
     return MaterialApp(
       routes: {
-        '/teacher-page': (context) => lecturerPage(
+        '/teacher-page': (context) => LecturerPage(
               lecturerId: widget.lecturerId,
             ),
       },
@@ -104,11 +106,14 @@ class _lecturerPageState extends State<lecturerPage> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Text(
-                            lecturerEmail,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              lecturerEmail,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
                             ),
                           ),
                         ],

@@ -82,7 +82,7 @@ class _LoginPageState extends State<LecturerLoginPage> {
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    lecturerPage(lecturerId: lecturerSnapshot.id),
+                    LecturerPage(lecturerId: lecturerSnapshot.id),
               ),
             );
           } else {
