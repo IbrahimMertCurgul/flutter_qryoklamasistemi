@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'slot-page.dart';
+import 'slot_page.dart';
 
 class TeacherPage extends StatefulWidget {
   final String lecturerId; // ÖĞRENCİ ID
-  const TeacherPage({required this.lecturerId, Key? key}) : super(key: key);
+  const TeacherPage({required this.lecturerId, super.key});
 
   @override
   _TeacherPageState createState() => _TeacherPageState();

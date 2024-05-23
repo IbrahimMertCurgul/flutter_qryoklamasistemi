@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_qryoklamasistemi/pages/teacher-page.dart';
+import 'package:flutter_qryoklamasistemi/pages/teacher_page.dart';
 
 class SlotsPage extends StatelessWidget {
   const SlotsPage({super.key});
@@ -20,7 +20,7 @@ class Slots extends StatelessWidget {
   final List<String> weeks = List.generate(12, (index) => 'Hafta ${index + 1}');
   final String lecturerID; // lecturerID burada tanımlandı
 
-  Slots({Key? key, required this.lecturerID}) : super(key: key);
+  Slots({super.key, required this.lecturerID});
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_qryoklamasistemi/pages/teacher-login.dart';
-import 'pages/student-login.dart';
+import 'package:flutter_qryoklamasistemi/pages/teacher_login.dart';
+import 'pages/student_login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -90,7 +90,7 @@ class QRyoklamasistemi extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            TeacherLoginPage())); //const TeacherLoginPage()
+                            const TeacherLoginPage())); //const TeacherLoginPage()
               },
               child: Container(
                 height: 53,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'student-page.dart';
+import 'student_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() {

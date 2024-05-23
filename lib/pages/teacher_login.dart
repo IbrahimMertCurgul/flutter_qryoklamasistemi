@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'teacher-page.dart'; // TeacherHomePage sayfasının import edildiği yer
+import 'teacher_page.dart'; // TeacherHomePage sayfasının import edildiği yer
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
   initializeDateFormatting('tr_TR', ''); // Türkçe yerel ayarları başlatıyoruz
-  runApp(TeacherLoginPage());
+  runApp(const TeacherLoginPage());
 }
 
 class TeacherLoginPage extends StatefulWidget {
+  const TeacherLoginPage({super.key});
+
   @override
   State<TeacherLoginPage> createState() => _LoginPageState();
 }
