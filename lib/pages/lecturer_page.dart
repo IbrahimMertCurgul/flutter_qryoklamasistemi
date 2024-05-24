@@ -572,7 +572,7 @@ class _LecturerPageState extends State<LecturerPage> {
                                               () {
                                             Navigator.of(context).pop(true);
                                           });
-                                          return AlertDialog(
+                                          return const AlertDialog(
                                             title: Text(
                                               "İşlem Başarılı!",
                                               style: TextStyle(

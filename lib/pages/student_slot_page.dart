@@ -72,7 +72,7 @@ class _StudentSlotsPageState extends State<StudentSlotsPage> {
     List<List<String>> weeklist = [];
 
     for (var i = 1; i <= 3; i++) {
-      var weekKey = 'hafta$i';
+      var weekKey = 'Hafta $i';
       var weekData = data[weekKey];
 
       if (weekData is List) {
@@ -161,7 +161,7 @@ class _StudentSlotsPageState extends State<StudentSlotsPage> {
                 children: [
                   Expanded(
                     child: ListView.builder(
-                      itemCount: weeks.length,
+                      itemCount: weekCount,
                       itemBuilder: (context, index) {
                         return FutureBuilder<List<List<String>>>(
                           future: GetWeekDetails(widget.ders, widget.studentId),
@@ -177,7 +177,9 @@ class _StudentSlotsPageState extends State<StudentSlotsPage> {
                               final weekDetails = detailsSnapshot.data ?? [];
                               return WeekTile(
                                   week: weeks[index],
-                                  items: weekDetails[index]);
+                                  items: weekDetails.isNotEmpty
+                                      ? weekDetails[index]
+                                      : []);
                             }
                           },
                         );
