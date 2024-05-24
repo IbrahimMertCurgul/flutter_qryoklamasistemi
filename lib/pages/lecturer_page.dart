@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter/services.dart';
 
 class LecturerPage extends StatefulWidget {
   final String lecturerId; // Öğretim görevlisi ID
@@ -513,6 +514,99 @@ class _LecturerPageState extends State<LecturerPage> {
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Öğrenci Geç Geldi"),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  TextFormField(
+                                    controller: _lateclass,
+                                    decoration: InputDecoration(
+                                        labelText: 'Gecikilen Ders'),
+                                  ),
+                                  TextFormField(
+                                    controller: _latenumber,
+                                    decoration: InputDecoration(
+                                        labelText: 'Öğrenci Numarası'),
+                                  ),
+                                  TextFormField(
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                    keyboardType: TextInputType.number,
+                                    controller: _lateweek,
+                                    decoration:
+                                        InputDecoration(labelText: 'Hafta'),
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('İptal'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    lateStudent(
+                                            _lateclass.text,
+                                            _latenumber.text,
+                                            int.parse(_lateweek.text))
+                                        .then((value) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          Future.delayed(Duration(seconds: 1),
+                                              () {
+                                            Navigator.of(context).pop(true);
+                                          });
+                                          return AlertDialog(
+                                            title: Text(
+                                              "İşlem Başarılı!",
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    });
+                                  },
+                                  child: Text('Kaydet'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Container(
+                        child: const Center(
+                          child: Text(
+                            "Öğrenci Geç Geldi",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 )
               ],
             ),
@@ -522,6 +616,10 @@ class _LecturerPageState extends State<LecturerPage> {
     );
   }
 }
+
+final TextEditingController _latenumber = TextEditingController();
+final TextEditingController _lateclass = TextEditingController();
+final TextEditingController _lateweek = TextEditingController();
 
 final collection = FirebaseFirestore.instance.collection("classes");
 
@@ -539,4 +637,25 @@ Future<int> getWeekCount(String ders) async {
   int fieldCount = data.length;
 
   return fieldCount - 1;
+}
+
+Future<void> lateStudent(String ders, String number, int hafta) async {
+  final collection = FirebaseFirestore.instance.collection("classes");
+  var querySnapshot =
+      await collection.where('classname', isEqualTo: ders).get();
+
+  if (querySnapshot.docs.isEmpty) {
+    print('No documents found for class: $ders');
+    return;
+  }
+
+  var document = querySnapshot.docs.first;
+
+  // Hafta X alanını güncelle veya oluştur ve bir dizi olarak ayarla
+  await FirebaseFirestore.instance
+      .collection('classes')
+      .doc(document.id)
+      .update({
+    'Hafta $hafta': FieldValue.arrayUnion([number]),
+  });
 }

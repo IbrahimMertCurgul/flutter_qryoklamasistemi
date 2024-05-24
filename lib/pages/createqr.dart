@@ -21,86 +21,106 @@ class CreateQR extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      extendBodyBehindAppBar: true,
+      backgroundColor: Color.fromARGB(255, 138, 35, 50),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        toolbarHeight: 100,
+        title: const Text(
+          "İstanbul Topkapı\nÜniversitesi",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.w800,
+              color: Color.fromARGB(255, 255, 255, 255)),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.of(context).pop();
           },
-        ),
+        ), // Logoyu AppBar'ın ortasına yerleştirir
       ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          const Center(
-            child: Text(
-              "QR Kodu Okutun",
-              style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.w600,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(colors: [
+            Color.fromARGB(255, 138, 35, 50),
+            Color.fromARGB(255, 78, 4, 19),
+          ]),
+        ),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 180,
+            ),
+            const Center(
+              child: Text(
+                "QR Kodu Okutun",
+                style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white),
               ),
             ),
-          ),
-          const SizedBox(
-            height: 50,
-          ),
-          FutureBuilder<int>(
-            future: generateRandomNumber(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                sendPassCode(ders, snapshot.data.toString(),
-                    hafta); // sendPassCode'ı burada çağır
-                return Container(
+            const SizedBox(
+              height: 50,
+            ),
+            FutureBuilder<int>(
+              future: generateRandomNumber(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  sendPassCode(ders, snapshot.data.toString(),
+                      hafta); // sendPassCode'ı burada çağır
+                  return Container(
+                    margin: EdgeInsets.fromLTRB(65, 0, 65, 0),
+                    color: Colors.white,
+                    alignment: Alignment.topCenter,
+                    child: QrImageView(
+                      data: snapshot.data.toString(),
+                      size: 250.0,
+                    ),
+                  );
+                }
+              },
+            ),
+            const SizedBox(height: 50),
+            Countdown(
+              seconds: 600,
+              build: (BuildContext context, double time) => Text(
+                'Kalan Süre: ${time.toInt()} saniye',
+                style: const TextStyle(
                   color: Colors.white,
-                  alignment: Alignment.topCenter,
-                  child: QrImageView(
-                    data: snapshot.data.toString(),
-                    size: 250.0,
-                  ),
-                );
-              }
-            },
-          ),
-          const SizedBox(height: 50),
-          Countdown(
-            seconds: 600,
-            build: (BuildContext context, double time) => Text(
-              'Kalan Süre: ${time.toInt()} saniye',
-              style: const TextStyle(
-                color: Colors.black54,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
+              interval: const Duration(seconds: 1),
+              onFinished: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LecturerPage(
+                              lecturerId: lecturerId,
+                            )));
+              },
             ),
-            interval: const Duration(seconds: 1),
-            onFinished: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => LecturerPage(
-                            lecturerId: lecturerId,
-                          )));
-            },
-          ),
-          const SizedBox(height: 100),
-          Text(
-            "$ders Dersi \n $hafta. Hafta Yoklaması",
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
+            const SizedBox(height: 60),
+            Text(
+              "$ders Dersi \n $hafta. Hafta Yoklaması",
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

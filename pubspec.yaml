@@ -73,11 +73,7 @@ flutter:
   assets:
     - assets\images\topkapilogo.png
     - assets\images\arkaplan.png
-    - assets\images\oislogo.png
-    - assets\images\almslogo.png
-    - assets\images\plan365logo.png
 
-    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
