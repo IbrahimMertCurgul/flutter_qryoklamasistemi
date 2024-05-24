@@ -71,7 +71,7 @@ class _StudentSlotsPageState extends State<StudentSlotsPage> {
 
     List<List<String>> weeklist = [];
 
-    for (var i = 1; i <= 3; i++) {
+    for (var i = 1; i <= data.length; i++) {
       var weekKey = 'Hafta $i';
       var weekData = data[weekKey];
 
