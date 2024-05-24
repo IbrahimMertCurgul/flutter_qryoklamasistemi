@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_qryoklamasistemi/pages/scanqr.dart';
 import 'package:flutter_qryoklamasistemi/pages/student_login.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
@@ -19,6 +20,7 @@ class _StudentPageState extends State<StudentPage> {
   late Timer _timer; // Timer nesnesini burada tanımlıyoruz
   String studentName = ''; //Öğrenci ismi
   String studentEmail = ''; //öğrenci maili
+  String studentNumber = ''; //vs
 
   @override
   void initState() {
@@ -47,6 +49,7 @@ class _StudentPageState extends State<StudentPage> {
         setState(() {
           studentName = (snapshot.data() as Map<String, dynamic>)['name'];
           studentEmail = (snapshot.data() as Map<String, dynamic>)['email'];
+          studentNumber = (snapshot.data() as Map<String, dynamic>)['number'];
         });
       } else {
         setState(() {
@@ -320,11 +323,180 @@ class _StudentPageState extends State<StudentPage> {
                         width: MediaQuery.of(context).size.width / 1.5,
                         height: 60,
                         decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10)),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         child: GestureDetector(
                           onTap: () {
-                            // QR Okuma ekranına yönlendir
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Ders Seçiniz'),
+                                  content: FutureBuilder<DocumentSnapshot>(
+                                    future: firestore
+                                        .collection('students')
+                                        .doc(widget.studentId)
+                                        .get(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      }
+
+                                      if (snapshot.hasError) {
+                                        return Center(
+                                            child: Text(
+                                                'Error: ${snapshot.error}'));
+                                      }
+
+                                      if (!snapshot.hasData ||
+                                          !snapshot.data!.exists) {
+                                        return const Center(
+                                            child: Text('No data found'));
+                                      }
+
+                                      var studentData = snapshot.data!.data()
+                                          as Map<String, dynamic>;
+                                      List<String> classes = List<String>.from(
+                                          studentData['classes']);
+
+                                      return SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.6,
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount: classes.length,
+                                          itemBuilder: (context, index) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return FutureBuilder<int>(
+                                                      future: getWeekCount(
+                                                          classes[index]),
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        if (snapshot
+                                                                .connectionState ==
+                                                            ConnectionState
+                                                                .waiting) {
+                                                          return const Center(
+                                                              child:
+                                                                  CircularProgressIndicator());
+                                                        }
+
+                                                        if (snapshot.hasError) {
+                                                          return Center(
+                                                              child: Text(
+                                                                  'Error: ${snapshot.error}'));
+                                                        }
+
+                                                        if (!snapshot.hasData) {
+                                                          return const Center(
+                                                              child: Text(
+                                                                  'No data found'));
+                                                        }
+
+                                                        return AlertDialog(
+                                                          title: Text(
+                                                              'Seçilen Ders: ${classes[index]}'),
+                                                          content: SizedBox(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.5,
+                                                            child: ListView
+                                                                .builder(
+                                                              shrinkWrap: true,
+                                                              itemCount:
+                                                                  snapshot
+                                                                      .data!,
+                                                              itemBuilder:
+                                                                  (context,
+                                                                      weekIndex) {
+                                                                return ListTile(
+                                                                  title: Text(
+                                                                      'Hafta ${weekIndex + 1}'),
+                                                                  onTap: () {
+                                                                    Navigator
+                                                                        .push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) =>
+                                                                                ScanQR(
+                                                                          ders:
+                                                                              classes[index],
+                                                                          hafta:
+                                                                              weekIndex + 1,
+                                                                          number:
+                                                                              studentNumber,
+                                                                          studentId:
+                                                                              widget.studentId,
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                );
+                                                              },
+                                                            ),
+                                                          ),
+                                                          actions: [
+                                                            TextButton(
+                                                              child: const Text(
+                                                                  'Kapat'),
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border(
+                                                    top: const BorderSide(
+                                                        color: Colors.grey),
+                                                    bottom: index ==
+                                                            classes.length - 1
+                                                        ? const BorderSide(
+                                                            color: Colors.grey)
+                                                        : BorderSide.none,
+                                                  ),
+                                                ),
+                                                child: ListTile(
+                                                  title: Text(classes[index]),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('Kapat'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           },
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -344,7 +516,7 @@ class _StudentPageState extends State<StudentPage> {
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ],
@@ -354,4 +526,22 @@ class _StudentPageState extends State<StudentPage> {
       ),
     );
   }
+}
+
+final collection = FirebaseFirestore.instance.collection("classes");
+
+Future<int> getWeekCount(String ders) async {
+  var querySnapshot =
+      await collection.where('classname', isEqualTo: ders).get();
+
+  if (querySnapshot.docs.isEmpty) {
+    return 0;
+  }
+
+  var document = querySnapshot.docs.first;
+  var data = document.data();
+
+  int fieldCount = data.length;
+
+  return fieldCount - 1;
 }
