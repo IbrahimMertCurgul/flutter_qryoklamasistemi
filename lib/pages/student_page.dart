@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'student_slot_page.dart';
 
 class StudentPage extends StatefulWidget {
   final String studentId;
@@ -269,16 +270,16 @@ class _StudentPageState extends State<StudentPage> {
                                     itemBuilder: (context, index) {
                                       return GestureDetector(
                                         onTap: () {
-                                          // 'slots_page' sayfasına yönlendir
-                                          /*Navigator.push(
+                                          Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => SlotsPage(
-                                                lecturerID: widget.studentId,
-                                                ders: ders,
+                                              builder: (context) =>
+                                                  StudentSlotsPage(
+                                                studentId: widget.studentId,
+                                                ders: classes[index],
                                               ),
                                             ),
-                                          );*/
+                                          );
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
