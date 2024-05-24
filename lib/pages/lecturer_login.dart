@@ -79,6 +79,7 @@ class _LoginPageState extends State<LecturerLoginPage> {
   }
 
   String _errorMessage = "";
+  bool _isLoading = false;
 
   Future<void> _signIn() async {
     final String username = _controllerUser.text;
@@ -132,6 +133,10 @@ class _LoginPageState extends State<LecturerLoginPage> {
       // Diğer hata durumlarında hata mesajını göster
       setState(() {
         _errorMessage = 'Hata: $e';
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
       });
     }
   }
@@ -232,15 +237,19 @@ class _LoginPageState extends State<LecturerLoginPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _signIn();
-                        },
-                        child: const Text(
-                          'Giriş Yap',
-                          style: TextStyle(fontSize: 20, color: Colors.black),
-                        ),
-                      ),
+                      child: _isLoading
+                          ? CircularProgressIndicator() //Yüklenirken simge göster
+                          : ElevatedButton(
+                              onPressed: () {
+                                _isLoading;
+                                _signIn();
+                              },
+                              child: const Text(
+                                'Giriş Yap',
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.black),
+                              ),
+                            ),
                     ),
                   ],
                 )

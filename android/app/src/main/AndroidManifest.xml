@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    package="com.example.your_package_name"
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="flutter_qryoklamasistemi"
         android:name="${applicationName}"

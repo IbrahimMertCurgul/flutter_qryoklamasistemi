@@ -71,6 +71,9 @@ flutter:
   assets:
     - assets\images\topkapilogo.png
     - assets\images\arkaplan.png
+    - assets\images\oislogo.png
+    - assets\images\almslogo.png
+    - assets\images\plan365logo.png
 
     
 
