@@ -3,7 +3,7 @@ import 'package:flutter_qryoklamasistemi/pages/lecturer_login.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'slot_page.dart';
+import 'lecturer_slot_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class LecturerPage extends StatefulWidget {
@@ -269,12 +269,14 @@ class _LecturerPageState extends State<LecturerPage> {
                                     itemBuilder: (context, index) {
                                       return GestureDetector(
                                         onTap: () {
-                                          // 'slots_page' sayfasına yönlendir
+                                          // 'slots_page' sayfasına yönlendir ve seçilen sınıfın adını ile
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => Slots(
+                                              builder: (context) => SlotsPage(
                                                 lecturerID: widget.lecturerId,
+                                                ders: classes[
+                                                    index], // Seçilen sınıfın adını SlotsPage'e gönder
                                               ),
                                             ),
                                           );

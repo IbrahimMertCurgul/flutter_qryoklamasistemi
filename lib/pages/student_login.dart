@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_qryoklamasistemi/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'student_page.dart'; // StudentPage sayfasının import edildiği yer
 import 'package:intl/date_symbol_data_local.dart';
@@ -13,6 +14,45 @@ class StudentLoginPage extends StatefulWidget {
 
   @override
   State<StudentLoginPage> createState() => _LoginPageState();
+}
+
+class PasswordField extends StatefulWidget {
+  final String title;
+  final TextEditingController controller;
+
+  PasswordField({required this.title, required this.controller});
+
+  @override
+  _PasswordFieldState createState() => _PasswordFieldState();
+}
+
+class _PasswordFieldState extends State<PasswordField> {
+  bool _obscureText = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: widget.controller,
+      obscureText: _obscureText,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        labelText: widget.title,
+        suffixIcon: IconButton(
+          icon: Icon(
+            _obscureText ? Icons.visibility : Icons.visibility_off,
+            color: Colors.grey,
+          ),
+          onPressed: () {
+            setState(() {
+              _obscureText = !_obscureText;
+            });
+          },
+        ),
+      ),
+    );
+  }
 }
 
 class _LoginPageState extends State<StudentLoginPage> {
@@ -34,22 +74,6 @@ class _LoginPageState extends State<StudentLoginPage> {
           borderRadius: BorderRadius.circular(30.0),
         ),
         labelText: 'Öğrenci Numarası',
-      ),
-    );
-  }
-
-  Widget _entryPass(
-    String title,
-    TextEditingController controller,
-  ) {
-    return TextField(
-      controller: controller,
-      obscureText: true, //Şifreyi gizle
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        labelText: 'Şifre',
       ),
     );
   }
@@ -139,7 +163,18 @@ class _LoginPageState extends State<StudentLoginPage> {
                           AppBar(
                             backgroundColor: Colors.transparent,
                             elevation: 0,
-                            leading: const BackButton(color: Colors.white),
+                            leading: BackButton(
+                              color: Colors.white,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const QRyoklamasistemi(),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                           Container(
                             height: height * .25,
@@ -174,14 +209,23 @@ class _LoginPageState extends State<StudentLoginPage> {
                               ],
                             ),
                           ),
+                          if (_errorMessage.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: Text(
+                                _errorMessage,
+                                style: const TextStyle(color: Colors.red),
+                              ),
+                            ),
                           ////////////////////////////ÖĞRENCİ INPUT/////////////////////////////////
                           Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
+                              padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
                               child: _entryUser("number", _controllerUser)),
                           ////////////////////////////ŞİFRE INPUT/////////////////////////////////
                           Padding(
                               padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                              child: _entryPass("password", _controllerPass)),
+                              child: PasswordField(
+                                  title: "Şifre", controller: _controllerPass)),
                         ],
                       ),
                     ),
@@ -197,14 +241,6 @@ class _LoginPageState extends State<StudentLoginPage> {
                         ),
                       ),
                     ),
-                    if (_errorMessage.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: Text(
-                          _errorMessage,
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                      ),
                   ],
                 )
               else
@@ -251,7 +287,9 @@ class _LoginPageState extends State<StudentLoginPage> {
                               padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
                               child: SizedBox(
                                   width: 500,
-                                  child: _entryPass("Şifre", _controllerPass)),
+                                  child: PasswordField(
+                                      title: "Şifre",
+                                      controller: _controllerPass)),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(40.0),

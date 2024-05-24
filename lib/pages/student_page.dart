@@ -3,7 +3,6 @@ import 'package:flutter_qryoklamasistemi/pages/student_login.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'slot_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class StudentPage extends StatefulWidget {
@@ -24,6 +23,7 @@ class _StudentPageState extends State<StudentPage> {
   void initState() {
     super.initState();
     initializeDateFormatting('tr_TR', ''); // DateFormat için tr_TR dil
+
     // Zamanlayıcıyı başlatmak için initState içinde Timer.periodic'i kullanıyoruz
     _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
       // Saat bilgisini her dakika başında güncelliyoruz
@@ -58,12 +58,12 @@ class _StudentPageState extends State<StudentPage> {
         studentName = 'Hata: $error'; // Hata durumunda hata mesajını kullan
       });
     });
+  }
 
-    @override
-    void dispose() {
-      _timer.cancel(); // Timer'ı dispose() yönteminde iptal ediyoruz
-      super.dispose();
-    }
+  @override
+  void dispose() {
+    _timer.cancel(); // Timer'ı dispose() yönteminde iptal ediyoruz
+    super.dispose();
   }
 
   @override
@@ -270,14 +270,15 @@ class _StudentPageState extends State<StudentPage> {
                                       return GestureDetector(
                                         onTap: () {
                                           // 'slots_page' sayfasına yönlendir
-                                          Navigator.push(
+                                          /*Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) => Slots(
+                                              builder: (context) => SlotsPage(
                                                 lecturerID: widget.studentId,
+                                                ders: ders,
                                               ),
                                             ),
-                                          );
+                                          );*/
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
