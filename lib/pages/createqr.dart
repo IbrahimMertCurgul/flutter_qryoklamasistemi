@@ -115,8 +115,21 @@ Future<void> sendPassCode(String ders, String passCode, int hafta) async {
   final collection = FirebaseFirestore.instance.collection("classes");
   var querySnapshot =
       await collection.where('classname', isEqualTo: ders).get();
+
+  if (querySnapshot.docs.isEmpty) {
+    print('No documents found for class: $ders');
+    return;
+  }
+
   var document = querySnapshot.docs.first;
-  FirebaseFirestore.instance.collection('classes').doc(document.id).update({
-    'Hafta $hafta': {'pass': passCode}
+
+  // Hafta X alanını güncelle veya oluştur ve bir dizi olarak ayarla
+  await FirebaseFirestore.instance
+      .collection('classes')
+      .doc(document.id)
+      .update({
+    'Hafta $hafta': [
+      {'pass': passCode}
+    ]
   });
 }
