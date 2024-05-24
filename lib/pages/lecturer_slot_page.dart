@@ -15,7 +15,7 @@ class SlotsPage extends StatefulWidget {
 class _SlotsPageState extends State<SlotsPage> {
   final collection = FirebaseFirestore.instance.collection("classes");
 
-  Future<int> GetWeekCount(String ders) async {
+  Future<int> getWeekCount(String ders) async {
     var querySnapshot =
         await collection.where('classname', isEqualTo: ders).get();
 
@@ -60,7 +60,7 @@ class _SlotsPageState extends State<SlotsPage> {
     List<List<String>> weeklist = [];
 
     for (var i = 1; i <= 3; i++) {
-      var weekKey = 'hafta$i';
+      var weekKey = 'Hafta $i';
       var weekData = data[weekKey];
 
       if (weekData is List) {
@@ -138,7 +138,7 @@ class _SlotsPageState extends State<SlotsPage> {
           ),
         ),
         child: FutureBuilder<int>(
-          future: GetWeekCount(widget.ders),
+          future: getWeekCount(widget.ders),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());

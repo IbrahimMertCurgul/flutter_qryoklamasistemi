@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_qryoklamasistemi/pages/lecturer_login.dart';
+import 'lecturer_slot_page.dart';
+import 'createqr.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'lecturer_slot_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 class LecturerPage extends StatefulWidget {
@@ -320,17 +321,177 @@ class _LecturerPageState extends State<LecturerPage> {
                         width: MediaQuery.of(context).size.width / 1.5,
                         height: 60,
                         decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10)),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         child: GestureDetector(
                           onTap: () {
-                            // QR Okuma ekranına yönlendir
-                            /* Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const QRyoklamasistemi(),
-                              ),
-                            ); */
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Ders Seçiniz'),
+                                  content: FutureBuilder<DocumentSnapshot>(
+                                    future: firestore
+                                        .collection('lecturers')
+                                        .doc(widget.lecturerId)
+                                        .get(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      }
+
+                                      if (snapshot.hasError) {
+                                        return Center(
+                                            child: Text(
+                                                'Error: ${snapshot.error}'));
+                                      }
+
+                                      if (!snapshot.hasData ||
+                                          !snapshot.data!.exists) {
+                                        return const Center(
+                                            child: Text('No data found'));
+                                      }
+
+                                      var studentData = snapshot.data!.data()
+                                          as Map<String, dynamic>;
+                                      List<String> classes = List<String>.from(
+                                          studentData['classes']);
+
+                                      return Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.7,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.5,
+                                        child: ListView.builder(
+                                          itemCount: classes.length,
+                                          itemBuilder: (context, index) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return FutureBuilder<int>(
+                                                      future: getWeekCount(
+                                                          classes[index]),
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        if (snapshot
+                                                                .connectionState ==
+                                                            ConnectionState
+                                                                .waiting) {
+                                                          return const Center(
+                                                              child:
+                                                                  CircularProgressIndicator());
+                                                        }
+
+                                                        if (snapshot.hasError) {
+                                                          return Center(
+                                                              child: Text(
+                                                                  'Error: ${snapshot.error}'));
+                                                        }
+
+                                                        if (!snapshot.hasData) {
+                                                          return const Center(
+                                                              child: Text(
+                                                                  'No data found'));
+                                                        }
+
+                                                        return AlertDialog(
+                                                          title: Text(
+                                                              'Seçilen Ders: ${classes[index]}'),
+                                                          content: Container(
+                                                            width: double
+                                                                .maxFinite,
+                                                            child: ListView
+                                                                .builder(
+                                                              shrinkWrap: true,
+                                                              itemCount:
+                                                                  snapshot
+                                                                      .data!,
+                                                              itemBuilder:
+                                                                  (context,
+                                                                      weekIndex) {
+                                                                return ListTile(
+                                                                  title: Text(
+                                                                      'Hafta ${weekIndex + 1}'),
+                                                                  onTap: () {
+                                                                    Navigator
+                                                                        .push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) =>
+                                                                                CreateQR(
+                                                                          ders:
+                                                                              classes[index],
+                                                                          hafta:
+                                                                              weekIndex + 1,
+                                                                          lecturerId:
+                                                                              widget.lecturerId,
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                );
+                                                              },
+                                                            ),
+                                                          ),
+                                                          actions: [
+                                                            TextButton(
+                                                              child:
+                                                                  Text('Kapat'),
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border(
+                                                    top: const BorderSide(
+                                                        color: Colors.grey),
+                                                    bottom: index ==
+                                                            classes.length - 1
+                                                        ? const BorderSide(
+                                                            color: Colors.grey)
+                                                        : BorderSide.none,
+                                                  ),
+                                                ),
+                                                child: ListTile(
+                                                  title: Text(classes[index]),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: Text('Kapat'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           },
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -350,9 +511,9 @@ class _LecturerPageState extends State<LecturerPage> {
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
-                ),
+                )
               ],
             ),
           ),
@@ -360,4 +521,22 @@ class _LecturerPageState extends State<LecturerPage> {
       ),
     );
   }
+}
+
+final collection = FirebaseFirestore.instance.collection("classes");
+
+Future<int> getWeekCount(String ders) async {
+  var querySnapshot =
+      await collection.where('classname', isEqualTo: ders).get();
+
+  if (querySnapshot.docs.isEmpty) {
+    return 0;
+  }
+
+  var document = querySnapshot.docs.first;
+  var data = document.data();
+
+  int fieldCount = data.length;
+
+  return fieldCount - 1;
 }
